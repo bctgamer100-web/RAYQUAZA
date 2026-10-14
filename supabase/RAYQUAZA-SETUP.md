@@ -40,4 +40,3 @@
 
 ## ที่ยังใช้ร่วมกับ ORDER Workspace
 - บัญชี BigSeller และลิงก์ไฟล์ส่งออก (`…myqcloud.com/temp/…`) เป็นของ BigSeller ตัวเดียวกัน
-- ชื่อไฟล์ชุดโค้ด `OrderWorkspace.exe` ใน `installer/` ยังเป็นชื่อเดิม (ยังไม่ได้เปลี่ยน)

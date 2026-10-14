@@ -16,8 +16,9 @@ html.rz-layout body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#sca
 }
 
 /* ================= แบนเนอร์หัวหน้า ================= */
+/* z-index: แบนเนอร์อยู่เหนือพื้นที่ทำงานด้านล่าง ไม่งั้นเมนู/กล่องที่เด้งลงจากแบนเนอร์ (เช่น วางหลาย SKU ของ RZ Plan) ถูกการ์ดด้านล่างทับ */
 .rz-hero{
-  position:relative; isolation:isolate;
+  position:relative; isolation:isolate; z-index:30;
   display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-areas:"main actions" "hud hud"; gap:14px 24px;
   margin:0 0 18px; padding:22px 26px 18px;
   background:
@@ -81,6 +82,8 @@ html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#sum
 html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .sun-imp-bar *{ color:#fff3e0!important; }
 html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .sun-toolbar{ width:min(620px, 100%); }
 html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .sun-search input{ background:rgba(0,0,0,.35)!important; color:#fff!important; border-color:color-mix(in srgb, var(--rz-ribbon-a) 45%, transparent)!important; }
+/* ช่องค้นหาอยู่ชิดขวาของแบนเนอร์: กล่องวางหลาย SKU กางไปทางซ้าย ไม่งั้นจอแคบจะล้นไปใต้แถบ RZ Plan ด้านขวา */
+html body #sunTool .rz-hero-actions .sun-bulk-panel{ left:auto; right:0; }
 html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .before-order-actions, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .summary-actions{ display:flex!important; flex-wrap:wrap; justify-content:flex-end; gap:8px; }
 html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions #orderAuto{ max-width:none!important; }
 html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions select, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .beta-secondary, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .summary-actions button, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions #orderAutoAdd{
