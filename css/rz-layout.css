@@ -1,0 +1,210 @@
+/* หมายเหตุ: กฎส่วนใหญ่ขึ้นต้นด้วย :is(#หน้า...) ให้มีน้ำหนักระดับ id ชนะกฎเดิมแบบ #orderTool .beta-card ใน style.css */
+/* RAYQUAZA LAYOUT — "Command Deck" (คู่กับ js/rz-layout.js) · ทำงานเมื่อ html มีคลาส rz-layout
+   แบนเนอร์หัวหน้า + แถบ HUD · คอลัมน์ "ขั้นตอน" + คอลัมน์ "ผลลัพธ์" · การ์ดใหม่ทั้งหมด (กรอบเดิมของบล็อกถูกล้างออก) */
+
+html.rz-layout body .panel-wrap > .page-heading{ display:none!important; } /* ชื่อหน้าเดิม: ระบบยังเขียนค่าอยู่ แต่ใช้แบนเนอร์แทน */
+html.rz-layout body .rz-gone, html.rz-layout body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-gone.rz-gone{ display:none!important; }
+html.rz-layout body .panel-wrap{ padding-top:18px!important; }
+html.rz-layout body section:is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool).rz-page{ padding:0!important; background:none!important; border:0!important; box-shadow:none!important; }
+/* กล่องครอบเดิม: ไม่มีกรอบแล้ว (เหลือเป็นแค่ที่อยู่ของ element) */
+html.rz-layout body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool).rz-page .beta-card:not(.rz-gone),
+html.rz-layout body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool).rz-page .app:not(.rz-gone),
+html.rz-layout body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool).rz-page .app > main:not(.rz-gone),
+html.rz-layout body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool).rz-page #sunImportTool:not(.rz-gone){
+  display:block!important; padding:0!important; margin:0!important; max-width:none!important;
+  background:none!important; border:0!important; box-shadow:none!important; backdrop-filter:none!important; -webkit-backdrop-filter:none!important;
+}
+
+/* ================= แบนเนอร์หัวหน้า ================= */
+.rz-hero{
+  position:relative; isolation:isolate;
+  display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-areas:"main actions" "hud hud"; gap:14px 24px;
+  margin:0 0 18px; padding:22px 26px 18px;
+  background:
+    linear-gradient(115deg, color-mix(in srgb, var(--rz-bar-from) 92%, transparent) 0%, color-mix(in srgb, var(--rz-bar-to) 88%, transparent) 60%, transparent 100%),
+    repeating-linear-gradient(135deg, transparent 0 22px, color-mix(in srgb, var(--rz-ribbon-a) 4%, transparent) 22px 23px);
+  border:1px solid color-mix(in srgb, var(--rz-trim) 55%, transparent);
+  color:#fff7ea;
+}
+/* มุมขวาบนเรืองแสง (วาดเป็นลาย ไม่ตัดกรอบ เมนูที่เด้งออกจากแบนเนอร์จะได้ไม่ถูกตัด) */
+.rz-hero::before{
+  content:""; position:absolute; right:-1px; top:-1px; width:44px; height:44px; z-index:2; pointer-events:none;
+  background:linear-gradient(225deg, var(--rz-ribbon-a) 0 26%, transparent 27%);
+}
+html[data-prod-theme="light"] .rz-hero{ color:#fffbea; }
+/* เส้นพลังไหลขอบล่าง */
+.rz-hero::after{
+  content:""; position:absolute; left:0; right:0; bottom:0; height:3px; z-index:2;
+  background:linear-gradient(90deg, var(--rz-trim), var(--rz-ribbon-b) 30%, var(--rz-ribbon-a) 55%, transparent 85%);
+  box-shadow:0 0 12px var(--rz-ribbon-b);
+}
+/* ภาพมังกรด้านขวา */
+.rz-hero-art{
+  position:absolute; z-index:-1; right:0; top:0; width:min(560px, 55%); height:100%;
+  background:url("../img/rayquaza-shiny.png?v=2") right center/contain no-repeat;
+  opacity:.28; filter:saturate(1.2) drop-shadow(0 0 30px var(--rz-ribbon-b));
+  -webkit-mask:linear-gradient(90deg, transparent, #000 45%); mask:linear-gradient(90deg, transparent, #000 45%);
+  animation:rzHeroFloat 9s ease-in-out infinite;
+}
+html[data-prod-theme="light"] .rz-hero-art{ background-image:url("../img/rayquaza-mega.png?v=1"); opacity:.32; transform:scaleX(-1); animation:none; }
+@keyframes rzHeroFloat{ 50%{ transform:translateY(-10px) rotate(-1.5deg); } }
+.rz-hero-main{ grid-area:main; min-width:0; }
+.rz-hero-eyebrow{ display:flex; align-items:center; gap:10px; margin-bottom:8px; font:700 11px/1 'Chakra Petch',sans-serif; letter-spacing:.32em; color:var(--rz-ribbon-a); }
+.rz-hero-code{
+  display:grid; place-items:center; min-width:34px; height:24px; padding:0 8px; letter-spacing:.06em; font-size:12px;
+  color:#1a0600; background:linear-gradient(135deg, var(--rz-ribbon-a), var(--rz-ribbon-b));
+  clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
+}
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-title{
+  display:flex; align-items:center; gap:14px; margin:0!important; padding:0!important; border:0!important;
+  font:700 clamp(26px, 3vw, 38px)/1.1 'Chakra Petch','Bai Jamjuree',sans-serif!important; letter-spacing:.03em;
+  color:#fffaf0!important; text-shadow:0 2px 0 rgba(0,0,0,.35), 0 0 22px color-mix(in srgb, var(--rz-ribbon-b) 45%, transparent);
+}
+.rz-hero-title i{
+  display:grid; place-items:center; width:46px; height:46px; flex:0 0 auto; font-style:normal; font-size:22px;
+  background:color-mix(in srgb, #000 30%, transparent); border:1px solid color-mix(in srgb, var(--rz-ribbon-a) 60%, transparent);
+  clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);
+  box-shadow:inset 0 0 14px color-mix(in srgb, var(--rz-ribbon-a) 35%, transparent);
+}
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-sub{ margin:8px 0 0!important; max-width:680px; font-size:14px!important; line-height:1.55; color:color-mix(in srgb, #fff 78%, transparent)!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-sub b{ color:var(--rz-ribbon-a)!important; }
+.rz-hero-actions{ grid-area:actions; display:flex; flex-direction:column; align-items:flex-end; justify-content:center; gap:8px; min-width:0; max-width:520px; }
+.rz-hero-hud{ grid-area:hud; display:flex; flex-wrap:wrap; align-items:stretch; gap:10px; }
+.rz-hero-hud.is-empty{ display:none; }
+
+/* ปุ่ม/ตัวเลือกในแบนเนอร์: โปร่ง ตัวหนังสือสว่าง */
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions label, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions span, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .sun-imp-bar-text{ color:#fff3e0!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .sun-imp-bar{
+  display:flex!important; align-items:center; gap:14px; margin:0!important; padding:8px 10px 8px 14px!important;
+  background:rgba(0,0,0,.28)!important; border:1px solid color-mix(in srgb, var(--rz-ribbon-a) 35%, transparent)!important; box-shadow:none!important; border-radius:2px!important;
+}
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .sun-imp-bar *{ color:#fff3e0!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .sun-toolbar{ width:min(620px, 100%); }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .sun-search input{ background:rgba(0,0,0,.35)!important; color:#fff!important; border-color:color-mix(in srgb, var(--rz-ribbon-a) 45%, transparent)!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .before-order-actions, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .summary-actions{ display:flex!important; flex-wrap:wrap; justify-content:flex-end; gap:8px; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions #orderAuto{ max-width:none!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions select, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .beta-secondary, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions .summary-actions button, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-actions #orderAutoAdd{
+  background:rgba(0,0,0,.3)!important; color:#fff3e0!important; border:1px solid color-mix(in srgb, var(--rz-ribbon-a) 40%, transparent)!important;
+}
+
+/* ตัวเลขในแถบ HUD */
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .beta-stats, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .before-order-stats, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .summary-stats,
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .compare-quick-status, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .order-summary-grid{
+  display:flex!important; flex-wrap:wrap; gap:10px; margin:0!important; padding:0!important; background:none!important; border:0!important; box-shadow:none!important; grid-template-columns:none!important;
+}
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud #orderSummaryExtra{ margin:0!important; padding:0!important; background:none!important; border:0!important; box-shadow:none!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .beta-stat, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .quick-status-item, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .order-summary-grid > div{
+  position:relative; display:flex!important; flex-direction:column; justify-content:center; gap:4px; min-width:130px; margin:0!important;
+  padding:9px 16px 9px 14px!important; border-radius:0!important;
+  background:linear-gradient(160deg, rgba(0,0,0,.42), rgba(0,0,0,.22))!important;
+  border:1px solid color-mix(in srgb, var(--rz-ribbon-a) 30%, transparent)!important;
+  box-shadow:inset 3px 0 0 var(--rz-ribbon-a)!important;
+  clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+  font:600 11.5px/1.2 'Bai Jamjuree',sans-serif!important; letter-spacing:.04em; color:color-mix(in srgb, #fff 72%, transparent)!important;
+}
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .beta-stat .sv, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .quick-status-item b, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .order-summary-grid b{
+  margin:0!important; font:700 24px/1 'Chakra Petch',sans-serif!important; color:#fffaf0!important; -webkit-text-fill-color:#fffaf0;
+  text-shadow:0 0 14px color-mix(in srgb, var(--rz-ribbon-b) 60%, transparent);
+}
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .quick-status-item span, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .order-summary-grid span{ color:inherit!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .quick-ok{ box-shadow:inset 3px 0 0 #78c850!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .quick-short{ box-shadow:inset 3px 0 0 #f8d030!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .quick-none{ box-shadow:inset 3px 0 0 #f08030!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-hero-hud .rz-hp{ margin:0!important; flex:1 1 320px; max-width:440px; }
+
+/* ================= พื้นที่ทำงาน ================= */
+.rz-deck{ display:grid; grid-template-columns:minmax(300px, 380px) minmax(0, 1fr); gap:18px; align-items:start; }
+.rz-deck-full{ grid-template-columns:minmax(0, 1fr); }
+.rz-side, .rz-main{ display:flex; flex-direction:column; gap:14px; min-width:0; }
+.rz-side{ position:sticky; top:84px; max-height:calc(100vh - 100px); overflow:auto; padding-right:2px; scrollbar-width:thin; }
+.rz-col-title{
+  display:flex; align-items:center; gap:10px; margin:0 0 -4px;
+  font:700 11px/1 'Chakra Petch',sans-serif; letter-spacing:.34em; text-transform:uppercase; color:var(--muted);
+}
+.rz-col-title::after{ content:""; flex:1; height:1px; background:linear-gradient(90deg, color-mix(in srgb, var(--rz-trim) 60%, transparent), transparent); }
+
+/* การ์ด */
+.rz-panel{
+  position:relative; min-width:0;
+  background:linear-gradient(170deg, color-mix(in srgb, var(--surface-2) 88%, transparent), color-mix(in srgb, var(--surface) 82%, transparent));
+  border:1px solid color-mix(in srgb, var(--border) 85%, transparent);
+  box-shadow:0 10px 26px rgba(0,0,0,.16);
+  animation:rzPanelIn .4s cubic-bezier(.2,.8,.2,1) both;
+}
+html.rz-3d-on.rz-fx-on .rz-panel{ backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px); }
+.rz-panel::before{ /* มุมตัดเรืองแสง */
+  content:""; position:absolute; right:0; top:0; width:23px; height:23px; pointer-events:none;
+  background:linear-gradient(225deg, var(--rz-ribbon-a) 0 30%, transparent 31%);
+}
+.rz-side .rz-panel:nth-of-type(2){ animation-delay:.05s; } .rz-side .rz-panel:nth-of-type(3){ animation-delay:.1s; } .rz-side .rz-panel:nth-of-type(4){ animation-delay:.15s; }
+@keyframes rzPanelIn{ from{ opacity:0; transform:translateY(10px); } }
+.rz-panel.is-off{ display:none!important; }
+.rz-panel-head{
+  display:flex; align-items:center; gap:10px; padding:10px 16px;
+  border-bottom:1px solid color-mix(in srgb, var(--border) 70%, transparent);
+  background:linear-gradient(90deg, color-mix(in srgb, var(--rz-ribbon-a) 10%, transparent), transparent 70%);
+  font:700 14px/1.2 'Chakra Petch','Bai Jamjuree',sans-serif; letter-spacing:.03em; color:var(--foreground);
+}
+.rz-panel-step, .rz-panel-ico{
+  display:grid; place-items:center; width:28px; height:28px; flex:0 0 auto; font-style:normal; font-size:15px;
+  clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);
+}
+.rz-panel-step{ color:#1a0600; background:linear-gradient(135deg, var(--rz-ribbon-a), var(--rz-ribbon-b)); font:800 15px/1 'Chakra Petch',sans-serif; }
+.rz-panel-ico{ background:color-mix(in srgb, var(--foreground) 10%, transparent); font-size:13px; }
+.rz-panel-body{ padding:14px 16px 16px; min-width:0; }
+.rz-panel-bare{ background:none; border:0; box-shadow:none; clip-path:none; animation:none; }
+.rz-panel-bare::before{ display:none; }
+.rz-panel-bare .rz-panel-body{ padding:0; }
+
+/* ล้างกรอบเดิมของบล็อกที่ย้ายเข้ามา (การ์ดใหม่เป็นกรอบแทน) */
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > *:not(.beta-drop):not(.scan-need):not(.progress):not(.beta-progress){
+  margin:0!important; background:none!important; border:0!important; box-shadow:none!important; border-radius:0!important;
+  backdrop-filter:none!important; -webkit-backdrop-filter:none!important;
+}
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .card, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .panel, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .saved-files,
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .download-box, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .compare-web-preview, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .compare-tools-extra,
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .preview, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .order-filter-wrap, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .order-pivot-wrap,
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .beta-preview, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .before-order-table-wrap, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .scan-result{ padding:0!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .card > h2:first-child{ display:none!important; }            /* ชื่อซ้ำกับหัวการ์ดใหม่ */
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .saved-files > .saved-files-head > strong{ display:none!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .saved-files > .saved-files-head{ padding:0 0 10px!important; margin:0!important; border:0!important; background:none!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .order-filter-wrap > .order-filter-title > strong{ display:none!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .compare-web-preview > .compare-web-preview-head{ padding:0 0 12px!important; background:none!important; border:0!important; }
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body > .download-box{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; }
+
+/* พื้นที่ลากไฟล์: ใหญ่ขึ้น มีวงพลัง */
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body .beta-drop, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body label.drop{
+  position:relative; min-height:150px; display:flex!important; flex-direction:column; align-items:center; justify-content:center; gap:6px; text-align:center;
+  border:1.5px dashed color-mix(in srgb, var(--rz-ribbon-a) 55%, var(--border))!important; border-radius:0!important;
+  background:radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--rz-ribbon-a) 12%, transparent), transparent 60%), color-mix(in srgb, var(--background) 45%, transparent)!important;
+  transition:border-color .2s, background .2s;
+}
+html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body .beta-drop:hover, html body :is(#mergeTool,#compareTool,#orderTool,#beforeOrderTool,#scanTool,#summaryTool,#sunTool) .rz-panel-body label.drop:hover{ border-color:var(--rz-ribbon-a)!important; background:radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--rz-ribbon-a) 22%, transparent), transparent 65%), color-mix(in srgb, var(--background) 45%, transparent)!important; }
+
+/* ข้อความ "ผลลัพธ์จะแสดงที่นี่" */
+.rz-placeholder{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; min-height:340px; text-align:center;
+  background:repeating-linear-gradient(135deg, transparent 0 14px, color-mix(in srgb, var(--rz-ribbon-a) 4%, transparent) 14px 15px), color-mix(in srgb, var(--surface) 55%, transparent);
+  border:1.5px dashed color-mix(in srgb, var(--border) 90%, transparent); color:var(--muted); animation:none;
+}
+.rz-placeholder::before{ display:none; }
+.rz-placeholder b{ font:700 18px/1.2 'Chakra Petch','Bai Jamjuree',sans-serif; color:var(--foreground); }
+.rz-placeholder span{ font-size:13.5px; }
+.rz-ph-art{
+  width:180px; height:130px; margin-bottom:6px; opacity:.28; background:var(--rz-ribbon-a);
+  -webkit-mask:url("../img/rayquaza-shiny.png?v=2") center/contain no-repeat; mask:url("../img/rayquaza-shiny.png?v=2") center/contain no-repeat;
+  animation:rzSleep 4s ease-in-out infinite;
+}
+
+/* หน้า นำเข้าข้อมูล: การ์ดอัปโหลด 4 ช่องเรียงแนวนอน */
+html body #mergeTool .rz-panel-body > #sunImportGrid{ display:grid!important; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:14px; }
+/* หน้า สรุปงาน: ไทม์ไลน์กว้างเต็ม */
+html body #summaryTool .rz-panel-body > #summaryList{ max-height:none!important; }
+
+@media (max-width:1100px){
+  .rz-deck{ grid-template-columns:minmax(0, 1fr); }
+  .rz-side{ position:static; max-height:none; overflow:visible; }
+  .rz-hero{ grid-template-columns:minmax(0,1fr); grid-template-areas:"main" "actions" "hud"; }
+  .rz-hero-actions{ align-items:flex-start; max-width:none; }
+}
+@media (prefers-reduced-motion:reduce){ .rz-panel, .rz-hero-art{ animation:none!important; } }

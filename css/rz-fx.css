@@ -1,0 +1,167 @@
+/* RAYQUAZA FX — เอฟเฟกต์ฝั่ง CSS (ทำงานเมื่อ html มีคลาส rz-fx-on) + ฉาก MEGA EVOLUTION
+   โหมดกลางคืน = MEGA ไชนี่ · โหมดกลางวัน = MEGA ปกติ สีมาจากตัวแปร --rz-* ใน rayquaza.css */
+
+/* ท้องฟ้า canvas วางทับเนื้อหาแบบ screen (กดทะลุได้) ให้เห็นริบบิ้น/ประกาย/สายฟ้าทั่วหน้า */
+#rzSky{ position:fixed; inset:0; z-index:60; pointer-events:none; mix-blend-mode:screen; }
+html.rz-fx-on body .shell{ position:relative; z-index:1; background:transparent!important; }
+#fxParticles{ display:none!important; } /* ชั้นจุดสีฟ้าของระบบเก่า */
+
+/* ปุ่ม FX */
+.rz-fx-toggle{
+  flex:0 0 auto; height:34px; padding:0 12px!important;
+  border:1px solid var(--rz-trim)!important; border-radius:0!important;
+  background:rgba(0,0,0,.28)!important; color:var(--rz-ribbon-a)!important;
+  font:700 12px/1 'Chakra Petch',sans-serif!important; letter-spacing:.12em; cursor:pointer;
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
+}
+.rz-fx-toggle[aria-pressed="true"]{ box-shadow:0 0 14px color-mix(in srgb, var(--rz-ribbon-a) 55%, transparent); }
+
+@media (prefers-reduced-motion:no-preference){
+
+  /* แถบนำทาง: พลังไหลตามเส้นขอบล่าง + ตราโลโก้หมุนวงแหวน */
+  html.rz-fx-on body .shell > .top:not(.side-right){ position:sticky; overflow:visible; }
+  html.rz-fx-on body .shell > .top:not(.side-right)::after{
+    content:""; position:absolute; left:0; right:0; bottom:-2px; height:3px; pointer-events:none;
+    background:linear-gradient(90deg, transparent 0, var(--rz-ribbon-a) 20%, var(--rz-ribbon-b) 50%, transparent 80%);
+    background-size:60% 100%; background-repeat:no-repeat;
+    animation:rzFlow 3.2s linear infinite;
+    filter:drop-shadow(0 0 6px var(--rz-ribbon-a));
+  }
+  @keyframes rzFlow{ from{ background-position:-70% 0 } to{ background-position:170% 0 } }
+
+  html.rz-fx-on .brand-mark{ position:relative; }
+  html.rz-fx-on .brand-mark::before{
+    content:""; position:absolute; inset:-6px; border-radius:50%; pointer-events:none;
+    border:2px dashed var(--rz-ribbon-a); opacity:.65;
+    animation:rzSpin 9s linear infinite;
+  }
+  @keyframes rzSpin{ to{ transform:rotate(360deg) } }
+  html.rz-fx-on .brand-mark svg, html.rz-fx-on .brand-mark img{ animation:rzPulse 2.6s ease-in-out infinite; }
+  @keyframes rzPulse{ 0%,100%{ filter:drop-shadow(0 0 2px var(--rz-ribbon-a)) } 50%{ filter:drop-shadow(0 0 10px var(--rz-ribbon-b)) } }
+
+  /* ชื่อแบรนด์: โฮโลแกรมไหล */
+  html.rz-fx-on .brand-copy b{
+    background-size:220% 100%;
+    animation:rzHolo 4.5s ease-in-out infinite alternate;
+  }
+  @keyframes rzHolo{ from{ background-position:0 0 } to{ background-position:100% 0 } }
+
+  /* แท็บที่เลือก: เรืองแสงหายใจ + แสงกวาด */
+  html.rz-fx-on body .shell > .top:not(.side-right) .tab.active{
+    position:relative; overflow:hidden;
+    animation:rzTabGlow 2.2s ease-in-out infinite;
+  }
+  html.rz-fx-on body .shell > .top:not(.side-right) .tab.active::after{
+    content:""; position:absolute; top:0; bottom:0; width:40%; left:-60%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent);
+    animation:rzShine 2.6s ease-in-out infinite;
+  }
+  @keyframes rzTabGlow{ 0%,100%{ filter:drop-shadow(0 0 3px var(--rz-ribbon-a)) } 50%{ filter:drop-shadow(0 0 12px var(--rz-ribbon-b)) } }
+  @keyframes rzShine{ 0%{ left:-60% } 60%,100%{ left:130% } }
+
+  /* ปุ่มหลัก: พลังกวาดตอนชี้ + ยกตัว */
+  html.rz-fx-on body .beta-primary, html.rz-fx-on body .sun-primary, html.rz-fx-on body .green,
+  html.rz-fx-on body .saved-file-open, html.rz-fx-on body #orderAutoBtn,
+  html.rz-fx-on body .excel-pivot-export-btn, html.rz-fx-on body .pdf-print-btn, html.rz-fx-on body .compare-web-download{
+    position:relative; overflow:hidden; transition:transform .15s, filter .15s, box-shadow .2s;
+  }
+  html.rz-fx-on body .beta-primary::after, html.rz-fx-on body .sun-primary::after, html.rz-fx-on body .green::after,
+  html.rz-fx-on body .saved-file-open::after, html.rz-fx-on body #orderAutoBtn::after,
+  html.rz-fx-on body .excel-pivot-export-btn::after, html.rz-fx-on body .pdf-print-btn::after, html.rz-fx-on body .compare-web-download::after{
+    content:""; position:absolute; top:0; bottom:0; width:45%; left:-70%; pointer-events:none;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.6), transparent);
+  }
+  html.rz-fx-on body .beta-primary:hover:not(:disabled), html.rz-fx-on body .sun-primary:hover:not(:disabled),
+  html.rz-fx-on body .green:hover, html.rz-fx-on body .saved-file-open:hover, html.rz-fx-on body #orderAutoBtn:hover:not(:disabled),
+  html.rz-fx-on body .excel-pivot-export-btn:hover, html.rz-fx-on body .pdf-print-btn:hover, html.rz-fx-on body .compare-web-download:hover{
+    transform:translateY(-2px);
+    filter:drop-shadow(0 6px 14px color-mix(in srgb, var(--rz-ribbon-b) 55%, transparent));
+  }
+  html.rz-fx-on body .beta-primary:hover::after, html.rz-fx-on body .sun-primary:hover::after, html.rz-fx-on body .green:hover::after,
+  html.rz-fx-on body .saved-file-open:hover::after, html.rz-fx-on body #orderAutoBtn:hover::after,
+  html.rz-fx-on body .excel-pivot-export-btn:hover::after, html.rz-fx-on body .pdf-print-btn:hover::after, html.rz-fx-on body .compare-web-download:hover::after{
+    animation:rzSweep .7s ease-out;
+  }
+  @keyframes rzSweep{ from{ left:-70% } to{ left:140% } }
+
+  /* การ์ด: ยกตัว + ขอบเรืองแสงตอนชี้ */
+  html.rz-fx-on body .beta-card, html.rz-fx-on body .sun-imp-card, html.rz-fx-on body .saved-files,
+  html.rz-fx-on body .order-filter-card, html.rz-fx-on body .beta-stat, html.rz-fx-on body .summary-stats > *{
+    transition:transform .2s, box-shadow .25s;
+  }
+  html.rz-fx-on body .sun-imp-card:hover, html.rz-fx-on body .beta-stat:hover, html.rz-fx-on body .summary-stats > *:hover{
+    transform:translateY(-3px);
+    box-shadow:inset 3px 0 0 var(--rz-trim), 0 14px 34px color-mix(in srgb, var(--rz-ribbon-b) 28%, transparent), 0 0 0 1px color-mix(in srgb, var(--rz-trim) 60%, transparent)!important;
+  }
+
+  /* เปลี่ยนหน้า: เนื้อหาพุ่งเข้าแบบฟันดาบ */
+  html.rz-fx-on body .tool.active{ animation:rzEnter .45s cubic-bezier(.2,.8,.2,1); }
+  @keyframes rzEnter{
+    from{ opacity:0; transform:translateY(14px) skewX(-1.2deg); clip-path:inset(0 100% 0 0); }
+    to{ opacity:1; transform:none; clip-path:inset(0 0 0 0); }
+  }
+  html.rz-fx-on body .page-heading h1::after{ animation:rzUnder 3.4s ease-in-out infinite alternate; background-size:200% 100%; }
+  @keyframes rzUnder{ from{ filter:drop-shadow(0 0 0 transparent) } to{ filter:drop-shadow(0 0 8px var(--rz-ribbon-a)) } }
+
+  /* ลิ้นชัก RZ Plan: พุ่งเข้าจากขวา */
+  html.rz-fx-on body:not(.collapse-right) .shell > aside.top.side-right{ animation:rzDrawer .35s cubic-bezier(.2,.8,.2,1); }
+  @keyframes rzDrawer{ from{ transform:translateX(100%); opacity:0 } to{ transform:none; opacity:1 } }
+  html.rz-fx-on body.collapse-right .side-peek-right{ animation:rzPeek 1.8s ease-in-out infinite; }
+  @keyframes rzPeek{ 0%,100%{ filter:drop-shadow(0 0 2px var(--rz-ribbon-a)) } 50%{ filter:drop-shadow(0 0 12px var(--rz-ribbon-b)) } }
+}
+
+/* ---------- ฉาก MEGA EVOLUTION / เปิดตัว ---------- */
+.rz-mega{
+  position:fixed; inset:0; z-index:2147483000; display:flex; align-items:center; justify-content:center;
+  overflow:hidden; cursor:pointer;
+  background:radial-gradient(circle at 50% 50%, rgba(0,0,0,.0), rgba(0,0,0,.55));
+  animation:rzMegaBg 1.5s ease-out forwards;
+}
+.rz-mega-intro{ animation-duration:1.9s; }
+@keyframes rzMegaBg{ 0%{ opacity:0 } 12%{ opacity:1 } 70%{ opacity:1 } 100%{ opacity:0 } }
+
+.rz-mega-flash{
+  position:absolute; inset:0;
+  background:radial-gradient(circle, #ffffff 0%, var(--rz-ribbon-a) 28%, var(--rz-ribbon-b) 52%, transparent 75%);
+  opacity:0; animation:rzFlash 1.2s ease-out forwards;
+}
+.rz-mega.is-night .rz-mega-flash{ background:radial-gradient(circle, #fff3d6 0%, #ffd34d 22%, #ff5a2c 48%, #7a0f08 70%, transparent 85%); }
+@keyframes rzFlash{ 0%{ opacity:0; transform:scale(.2) } 22%{ opacity:.95; transform:scale(1) } 100%{ opacity:0; transform:scale(1.7) } }
+
+.rz-mega-ring{
+  position:absolute; left:50%; top:50%; width:80px; height:80px; margin:-40px 0 0 -40px;
+  border-radius:50%; border:3px solid var(--rz-ribbon-a); opacity:0;
+  box-shadow:0 0 30px var(--rz-ribbon-b), inset 0 0 30px var(--rz-ribbon-b);
+  animation:rzRing 1.2s cubic-bezier(.15,.7,.2,1) forwards;
+}
+.rz-mega-ring.r2{ border-color:var(--rz-ribbon-b); animation-delay:.12s; }
+.rz-mega-ring.r3{ border-color:var(--rz-trim); animation-delay:.26s; }
+@keyframes rzRing{ 0%{ opacity:.95; transform:scale(.3) } 100%{ opacity:0; transform:scale(26) } }
+
+.rz-mega-beam{
+  position:absolute; left:-10%; right:-10%; top:50%; height:6px; margin-top:-3px;
+  background:linear-gradient(90deg, transparent, var(--rz-ribbon-a), #ffffff, var(--rz-ribbon-b), transparent);
+  box-shadow:0 0 28px var(--rz-ribbon-a);
+  transform:scaleX(0); opacity:0; animation:rzBeam 1.1s ease-out .08s forwards;
+}
+@keyframes rzBeam{ 0%{ transform:scaleX(0); opacity:1 } 40%{ transform:scaleX(1); opacity:1 } 100%{ transform:scaleX(1.2) scaleY(.1); opacity:0 } }
+
+.rz-mega-title{ position:relative; text-align:center; transform:scale(.6); opacity:0; animation:rzTitle 1.35s cubic-bezier(.2,.9,.2,1) .1s forwards; }
+.rz-mega-title small{
+  display:block; font:600 14px/1 'Chakra Petch',sans-serif; letter-spacing:.5em;
+  color:var(--rz-ribbon-a); text-shadow:0 0 14px var(--rz-ribbon-b); margin-bottom:10px;
+}
+.rz-mega-title b{
+  display:block; font:700 clamp(34px,7vw,84px)/1 'Chakra Petch',sans-serif; letter-spacing:.14em;
+  background:linear-gradient(180deg, #fff6d6, var(--rz-ribbon-a) 45%, var(--rz-ribbon-b));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 18px var(--rz-ribbon-b)) drop-shadow(0 4px 0 rgba(0,0,0,.35));
+}
+@keyframes rzTitle{ 0%{ transform:scale(.6); opacity:0 } 25%{ transform:scale(1.08); opacity:1 } 70%{ transform:scale(1); opacity:1 } 100%{ transform:scale(1.15); opacity:0 } }
+
+@media (prefers-reduced-motion:reduce){
+  .rz-mega{ display:none!important; }
+}
+
+/* แสงไฟฉายสีฟ้าตามเมาส์ของระบบเก่า: ปิดถาวร */
+#fxCursorGlow{ display:none!important; }

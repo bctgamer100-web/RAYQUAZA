@@ -1,0 +1,244 @@
+/* RAYQUAZA TRAINER + WORLD — คู่กับ js/rz-trainer.js และ js/rz-world.js
+   ใช้กล่องสไตล์เกมเดียวกับ rz-poke.css (--rz-dlg-*) และสีธีมจาก rayquaza.css */
+
+/* ================= หลอด EXP ใต้ชื่อแบรนด์ ================= */
+.rz-exp{ position:relative; display:flex; align-items:center; gap:6px; margin-top:3px; cursor:pointer; }
+.rz-exp em{ font:700 10px/1 'Chakra Petch',sans-serif; font-style:normal; letter-spacing:.06em; color:var(--rz-ribbon-a); -webkit-text-fill-color:var(--rz-ribbon-a); white-space:nowrap; }
+.rz-exp-track{ width:84px; height:5px; border-radius:3px; overflow:hidden; background:color-mix(in srgb, var(--foreground) 14%, transparent); box-shadow:inset 0 0 0 1px rgba(0,0,0,.25); }
+.rz-exp-track i{ display:block; height:100%; width:0; background:linear-gradient(90deg, #58c8f8, #38a0f0); transition:width .9s cubic-bezier(.2,.8,.2,1); }
+html[data-prod-theme="light"] .rz-exp-track i{ background:linear-gradient(90deg, #1d6b58, #0f4a3c); }
+.rz-exp.is-gain .rz-exp-track{ animation:rzExpGlow .9s ease-out; }
+@keyframes rzExpGlow{ 30%{ box-shadow:0 0 10px var(--rz-ribbon-a), inset 0 0 0 1px var(--rz-ribbon-a); } }
+.rz-exp-float{
+  position:absolute; left:92px; top:-6px; pointer-events:none; white-space:nowrap;
+  font:700 11px/1 'Chakra Petch',sans-serif; color:var(--rz-ribbon-a); -webkit-text-fill-color:var(--rz-ribbon-a);
+  text-shadow:0 0 8px var(--rz-ribbon-b); animation:rzExpFloat 1.4s ease-out forwards;
+}
+@keyframes rzExpFloat{ from{ transform:translateY(6px); opacity:0 } 20%{ opacity:1 } to{ transform:translateY(-16px); opacity:0 } }
+
+/* ================= เลเวลอัป ================= */
+.rz-lvup{ position:fixed; inset:0; z-index:2147482998; display:flex; align-items:center; justify-content:center; cursor:pointer; background:rgba(0,0,0,.45); animation:rzFade .25s; }
+.rz-lvup.is-out{ animation:rzFadeOut .4s forwards; }
+.rz-lvup-rays{
+  position:absolute; left:50%; top:50%; width:160vmax; height:160vmax; margin:-80vmax 0 0 -80vmax;
+  background:repeating-conic-gradient(from 0deg, color-mix(in srgb, #58c8f8 26%, transparent) 0 7deg, transparent 7deg 18deg);
+  -webkit-mask:radial-gradient(circle, #000 0, #000 8%, transparent 42%); mask:radial-gradient(circle, #000 0, #000 8%, transparent 42%);
+  animation:rzRays 3.2s linear;
+}
+.rz-lvup-card{
+  position:relative; text-align:center; padding:16px 44px 20px; min-width:280px;
+  background:var(--rz-dlg-bg); color:var(--rz-dlg-fg); border:3px solid var(--rz-dlg-line); border-radius:12px;
+  box-shadow:inset 0 0 0 3px var(--rz-dlg-bg), inset 0 0 0 6px #58c8f8, 0 0 40px rgba(88,200,248,.6), 0 20px 50px rgba(0,0,0,.4);
+  animation:rzWinIn .6s cubic-bezier(.2,1.4,.3,1);
+}
+.rz-lvup-card img{ display:block; width:180px; margin:-90px auto 4px; filter:drop-shadow(0 6px 14px rgba(0,0,0,.4)); animation:rzSleep 2s ease-in-out infinite; }
+.rz-lvup-card small{ display:block; font:700 13px/1 'Chakra Petch',sans-serif; letter-spacing:.4em; color:#2878c8; }
+.rz-lvup-card b{ display:block; margin:6px 0 4px; font:700 54px/1 'Chakra Petch',sans-serif; transition:transform .3s; }
+.rz-lvup-card b.is-up{ animation:rzLvPop .5s cubic-bezier(.2,1.6,.3,1); color:#2878c8; }
+@keyframes rzLvPop{ 0%{ transform:scale(1) } 40%{ transform:scale(1.5) } 100%{ transform:scale(1) } }
+.rz-lvup-card p{ margin:0; font-size:15px; }
+
+/* ================= บัตรเทรนเนอร์ / สรุปวันนี้ ================= */
+.rz-tc-ov{ position:fixed; inset:0; z-index:2147482994; display:flex; align-items:center; justify-content:center; padding:16px; background:rgba(0,0,0,.5); animation:rzFade .2s; }
+.rz-tc-ov.is-out{ animation:rzFadeOut .25s forwards; }
+.rz-tc{
+  width:min(720px, 100%); max-height:calc(100vh - 32px); overflow:auto;
+  background:linear-gradient(160deg, #fdf6e3, #f2e6c8); color:#2a2420;
+  border:3px solid #3a3330; border-radius:14px;
+  box-shadow:inset 0 0 0 4px #fdf6e3, inset 0 0 0 7px var(--rz-trim), 0 24px 60px rgba(0,0,0,.5);
+  padding:16px 20px 18px; animation:rzWinIn .4s cubic-bezier(.2,1.2,.3,1);
+  font-family:'Bai Jamjuree','Leelawadee UI',Tahoma,sans-serif;
+}
+.rz-tc-head{ display:flex; align-items:center; gap:12px; padding-bottom:10px; margin-bottom:12px; border-bottom:2px dashed rgba(58,51,48,.3); }
+.rz-tc-head b{ font:700 20px/1 'Chakra Petch',sans-serif; letter-spacing:.2em; color:var(--rz-trim); }
+.rz-tc-head span{ margin-left:auto; font:600 13px/1 'Chakra Petch',sans-serif; color:#6a5a50; letter-spacing:.06em; }
+html body .rz-tc button{
+  all:unset; box-sizing:border-box; cursor:pointer; text-align:center; font:700 14px/1 'Bai Jamjuree',sans-serif!important;
+  border-radius:6px!important; padding:9px 16px!important; color:#2a2420!important; background:#e8dcc0!important; border:2px solid #3a3330!important;
+}
+html body .rz-tc button:hover{ background:#f6ecd2!important; }
+html body .rz-tc .rz-tc-x{ padding:0!important; width:30px; height:30px; line-height:26px; font-size:20px!important; }
+.rz-tc-body{ display:grid; grid-template-columns:1fr 220px; gap:16px; }
+.rz-tc-name{ display:flex; align-items:center; gap:8px; font-weight:700; color:#6a5a50; }
+html body .rz-tc-name input{
+  flex:1; min-width:0; padding:6px 10px!important; border-radius:6px!important; border:2px solid #3a3330!important;
+  background:#fffaf0!important; color:#2a2420!important; font:700 16px/1.2 'Bai Jamjuree',sans-serif!important; -webkit-text-fill-color:#2a2420;
+}
+.rz-tc-lv{ margin:12px 0; }
+.rz-tc-lv b{ font:700 28px/1 'Chakra Petch',sans-serif; }
+.rz-tc-exptrack{ display:block; height:8px; margin:6px 0 4px; border-radius:5px; background:#5a5048; border:2px solid #3a3330; overflow:hidden; }
+.rz-tc-exptrack i{ display:block; height:100%; background:linear-gradient(90deg,#58c8f8,#2878c8); }
+.rz-tc-lv small{ color:#6a5a50; font-weight:600; }
+.rz-tc-stats{ display:grid; grid-template-columns:1fr 1fr; gap:4px 16px; }
+.rz-tc-stat{ display:flex; justify-content:space-between; gap:8px; padding:4px 0; border-bottom:1px solid rgba(58,51,48,.15); font-size:13.5px; }
+.rz-tc-stat span{ color:#6a5a50; }
+.rz-tc-stat b{ font-variant-numeric:tabular-nums; text-align:right; }
+.rz-tc-mon{ position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; border-radius:10px;
+  background:radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--rz-ribbon-a) 35%, transparent), transparent 70%), linear-gradient(160deg, var(--rz-bar-from), var(--rz-bar-to)); }
+.rz-tc-mon img{ width:100%; filter:drop-shadow(0 8px 14px rgba(0,0,0,.45)); animation:rzSleep 3.5s ease-in-out infinite; }
+.rz-tc-types{ display:flex; gap:4px; margin:4px 0 10px; }
+.rz-tc-today{ display:flex; flex-wrap:wrap; gap:6px 14px; align-items:center; margin:14px 0 10px; padding:8px 12px; border-radius:8px; background:rgba(58,51,48,.08); font-weight:600; }
+.rz-tc-today b{ color:var(--rz-trim); font-family:'Chakra Petch',sans-serif; letter-spacing:.1em; }
+.rz-tc-badges{ display:grid; grid-template-columns:repeat(6, 1fr); gap:8px; }
+.rz-badge{ display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center; font-size:11px; font-weight:700; color:#8a7a70; }
+.rz-badge i{
+  display:grid; place-items:center; width:48px; height:48px; font-style:normal; font-size:22px;
+  clip-path:polygon(50% 0, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  background:#cfc4ae; color:#8a7a70; filter:grayscale(1);
+}
+.rz-badge.is-on{ color:#2a2420; }
+.rz-badge.is-on i{
+  filter:none; background:linear-gradient(160deg, var(--rz-ribbon-a), var(--rz-ribbon-b) 60%, var(--rz-trim));
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.4); animation:rzBadge 3s ease-in-out infinite;
+}
+@keyframes rzBadge{ 50%{ filter:brightness(1.15) drop-shadow(0 0 6px var(--rz-ribbon-a)); } }
+.rz-tc-foot{ display:flex; justify-content:flex-end; gap:8px; margin-top:14px; }
+@media (max-width:640px){
+  .rz-tc-body{ grid-template-columns:1fr; }
+  .rz-tc-mon{ order:-1; max-height:200px; }
+  .rz-tc-mon img{ width:60%; }
+  .rz-tc-badges{ grid-template-columns:repeat(4, 1fr); }
+  .rz-tc-stats{ grid-template-columns:1fr; }
+}
+/* สรุปวันนี้ */
+.rz-day{ width:min(480px, 100%); text-align:center; }
+.rz-day-lead{ margin:4px 0 12px; font-size:15px; }
+.rz-day-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.rz-day-grid div{ padding:10px 4px; border-radius:8px; background:rgba(58,51,48,.08); }
+.rz-day-grid b{ display:block; font:700 26px/1.1 'Chakra Petch',sans-serif; color:var(--rz-trim); font-variant-numeric:tabular-nums; }
+.rz-day-grid span{ font-size:12px; color:#6a5a50; font-weight:600; }
+.rz-day-exp{ margin:12px 0 4px; font-weight:700; color:#2878c8; }
+.rz-day-mood{ margin:0; font-size:16px; font-weight:700; }
+
+/* ================= กล่องยืนยัน (ใช่ / ไม่ใช่) ================= */
+.rz-ask .rz-dlg-big{ cursor:default; width:100%; }
+.rz-ask-wrap{ width:min(640px, 100%); display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+.rz-ask-menu{
+  display:flex; flex-direction:column; padding:6px; margin-right:10px;
+  background:var(--rz-dlg-bg); border:3px solid var(--rz-dlg-line); border-radius:10px;
+  box-shadow:inset 0 0 0 2px var(--rz-dlg-bg), inset 0 0 0 4px var(--rz-trim), 0 12px 30px rgba(0,0,0,.35);
+  animation:rzDlgIn .2s;
+}
+html body .rz-ask-menu button{
+  all:unset; box-sizing:border-box; cursor:pointer; position:relative; display:block; text-align:left;
+  padding:7px 22px 7px 30px!important; min-width:130px; height:auto!important; min-height:0!important; margin:0!important;
+  font:700 16px/1.2 'Bai Jamjuree',sans-serif!important; color:var(--rz-dlg-fg)!important; -webkit-text-fill-color:var(--rz-dlg-fg);
+  background:transparent!important; border:0!important; border-radius:4px!important; box-shadow:none!important; clip-path:none!important; transform:none!important;
+}
+html body .rz-ask-menu button.is-on::before{ content:"▶"; position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:12px; color:var(--rz-trim); animation:rzNext .6s steps(2) infinite; }
+html body .rz-ask-menu button.is-on{ background:color-mix(in srgb, var(--rz-ribbon-a) 25%, transparent)!important; }
+html body .rz-ask-menu button:focus-visible{ outline:none!important; }
+
+/* ================= พักหน้าจอ ================= */
+.rz-idle{
+  position:fixed; inset:0; z-index:2147482993; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+  background:radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--rz-bar-from) 70%, #000), #020203 80%);
+  color:#fff; animation:rzFade 1.2s; cursor:none;
+}
+.rz-idle.is-out{ animation:rzFadeOut .5s forwards; }
+.rz-idle-stars{
+  position:absolute; inset:0; opacity:.7;
+  background-image:radial-gradient(1.5px 1.5px at 12% 20%, #fff, transparent), radial-gradient(1px 1px at 30% 70%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 55% 15%, #fff, transparent), radial-gradient(1px 1px at 72% 55%, #fff, transparent),
+    radial-gradient(2px 2px at 88% 30%, #fff, transparent), radial-gradient(1px 1px at 40% 40%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 20% 85%, #fff, transparent), radial-gradient(1px 1px at 92% 80%, #fff, transparent);
+  animation:rzTwinkle 4s ease-in-out infinite alternate;
+}
+@keyframes rzTwinkle{ to{ opacity:.25 } }
+.rz-idle-mon{ position:relative; width:min(46vw, 420px); }
+.rz-idle-mon img{ width:100%; display:block; filter:brightness(.55) saturate(.8) drop-shadow(0 0 30px color-mix(in srgb, var(--rz-ribbon-b) 40%, transparent)); animation:rzBreath 5s ease-in-out infinite; }
+@keyframes rzBreath{ 50%{ transform:scale(1.03) translateY(-6px); } }
+.rz-idle-z{ position:absolute; right:12%; top:10%; font:700 28px/1 'Chakra Petch',sans-serif; color:var(--rz-ribbon-a); opacity:0; animation:rzZzz 3.6s ease-in-out infinite; }
+.rz-idle-z.z2{ font-size:38px; animation-delay:1.2s; }
+.rz-idle-z.z3{ font-size:22px; animation-delay:2.4s; }
+.rz-idle-clock{ text-align:center; }
+.rz-idle-clock b{ display:block; font:700 clamp(56px, 10vw, 120px)/1 'Chakra Petch',sans-serif; letter-spacing:.06em; text-shadow:0 0 30px color-mix(in srgb, var(--rz-ribbon-b) 50%, transparent); }
+.rz-idle-clock span{ font-size:16px; opacity:.75; }
+.rz-idle p{ margin:6px 0 0; font-size:14px; opacity:.6; }
+
+/* ================= หน้าต่างคีย์ลัด + Command palette เดิม: สไตล์เกม ================= */
+html body #ppShortcutsModal, html body .fx-command-box{
+  background:var(--rz-dlg-bg)!important; color:var(--rz-dlg-fg)!important;
+  border:3px solid var(--rz-dlg-line)!important; border-radius:12px!important;
+  box-shadow:inset 0 0 0 3px var(--rz-dlg-bg), inset 0 0 0 6px var(--rz-trim), 0 24px 60px rgba(0,0,0,.5)!important;
+}
+html body #ppShortcutsModal .pp-short-title{ font-family:'Chakra Petch',sans-serif!important; color:var(--rz-trim)!important; letter-spacing:.06em; }
+html body #ppShortcutsModal .pp-short-row{ border-color:rgba(58,51,48,.15)!important; color:var(--rz-dlg-fg)!important; }
+html body #ppShortcutsModal .pp-key, html body .fx-command-box .fx-key{
+  background:#3a3330!important; color:#ffd34d!important; border:0!important; border-radius:4px!important;
+  font-family:'Chakra Petch',sans-serif!important; box-shadow:0 2px 0 #1a1614!important;
+}
+html body #ppShortcutsModal .pp-short-close{ color:var(--rz-dlg-fg)!important; background:transparent!important; border:2px solid var(--rz-dlg-line)!important; }
+html body #ppShortcutsModal .rz-short-sec{ margin-top:8px; border-top:2px dashed rgba(58,51,48,.3)!important; font:700 13px/1 'Chakra Petch',sans-serif; color:var(--rz-trim)!important; letter-spacing:.12em; }
+html body .fx-command-box input{ background:#fffaf0!important; color:#2a2420!important; border:2px solid #3a3330!important; -webkit-text-fill-color:#2a2420; }
+html body .fx-command-box .fx-command-item{ color:var(--rz-dlg-fg)!important; background:transparent!important; border-radius:6px!important; }
+html body .fx-command-box .fx-command-item:hover, html body .fx-command-box .fx-command-item:focus{ background:color-mix(in srgb, var(--rz-ribbon-a) 25%, transparent)!important; }
+
+/* ================= สภาพอากาศ ================= */
+#rzWeather{ position:fixed; inset:0; z-index:58; pointer-events:none; }
+html.rz-fx-on[data-rz-weather="fog"] body::after{
+  content:""; position:fixed; inset:0; z-index:57; pointer-events:none;
+  background:
+    radial-gradient(60% 40% at 20% 70%, rgba(200,200,205,.16), transparent 70%),
+    radial-gradient(50% 35% at 80% 30%, rgba(200,200,205,.12), transparent 70%);
+  animation:rzFog 30s ease-in-out infinite alternate;
+}
+@keyframes rzFog{ to{ transform:translateX(6%) } }
+.rz-weather-btn, .rz-bgm-toggle{ min-width:38px!important; }
+.rz-bgm-toggle.is-off{ opacity:.45; filter:grayscale(1); }
+
+/* ================= ตาราง ================= */
+@media (prefers-reduced-motion:no-preference){
+  html.rz-fx-on body table tbody tr:hover > td{
+    background-color:color-mix(in srgb, var(--rz-ribbon-a) 9%, transparent)!important;
+    box-shadow:inset 0 1px 0 color-mix(in srgb, var(--rz-ribbon-a) 35%, transparent), inset 0 -1px 0 color-mix(in srgb, var(--rz-ribbon-a) 35%, transparent);
+  }
+  html.rz-fx-on body table tbody tr:hover > td:first-child{
+    box-shadow:inset 3px 0 0 var(--rz-ribbon-a), inset 0 1px 0 color-mix(in srgb, var(--rz-ribbon-a) 35%, transparent), inset 0 -1px 0 color-mix(in srgb, var(--rz-ribbon-a) 35%, transparent);
+  }
+}
+/* ระหว่างกำลังโหลด: แถบแสงวิ่งแทนช่องว่าง */
+html body .rz-loading::after{
+  content:""; display:block; height:132px; margin-top:10px; border-radius:4px;
+  background:
+    linear-gradient(100deg, transparent 30%, color-mix(in srgb, var(--rz-ribbon-a) 22%, transparent) 50%, transparent 70%) 0 0/250% 100%,
+    repeating-linear-gradient(180deg, color-mix(in srgb, var(--foreground) 9%, transparent) 0 18px, transparent 18px 26px);
+  animation:rzShimmer 1.3s linear infinite;
+}
+@keyframes rzShimmer{ from{ background-position:120% 0, 0 0 } to{ background-position:-120% 0, 0 0 } }
+
+@media (prefers-reduced-motion:reduce){
+  .rz-idle, .rz-lvup{ display:none!important; }
+  #rzWeather{ display:none!important; }
+}
+
+/* ================= เมนู ✦ รวมปุ่มเปิด/ปิด ================= */
+.rz-dock{ position:relative; flex:0 0 auto; }
+html body .rz-dock-btn{ min-width:38px; font-size:16px!important; letter-spacing:0!important; }
+.rz-dock.is-open .rz-dock-btn{ box-shadow:0 0 14px color-mix(in srgb, var(--rz-ribbon-a) 55%, transparent); }
+.rz-dock-panel{
+  position:absolute; right:0; top:calc(100% + 8px); z-index:120; display:none; min-width:230px; padding:6px;
+  background:linear-gradient(165deg, var(--surface-2), var(--surface)); border:1px solid var(--rz-trim); border-radius:4px;
+  box-shadow:inset 3px 0 0 var(--rz-trim), 0 16px 40px rgba(0,0,0,.45);
+}
+.rz-dock.is-open .rz-dock-panel{ display:flex; flex-direction:column; gap:4px; animation:rzPickIn .16s cubic-bezier(.2,.9,.2,1); }
+html body .rz-dock-panel > button{
+  display:flex!important; align-items:center; justify-content:flex-start; gap:10px; width:100%!important; height:36px;
+  margin:0!important; padding:0 12px!important; clip-path:none!important; text-align:left;
+}
+html body .rz-dock-panel > button::after{
+  content:attr(data-label); margin-left:auto; font:600 12.5px/1 'Bai Jamjuree',sans-serif; letter-spacing:0;
+  color:var(--foreground); opacity:.85;
+}
+html body .rz-dock-panel > button[aria-pressed="false"]::after{ opacity:.5; }
+
+/* ================= แถบนำทางแบบกะทัดรัด (จอไม่กว้างมาก) — ให้แท็บมีที่มากขึ้น ================= */
+@media (max-width:1599px){
+  .rz-brand-types{ display:none!important; }
+  html body .theme-switch .theme-opt > span:not(.rz-auto-ico){ display:none!important; }
+  html body .theme-switch:has(.rz-auto-opt){ grid-template-columns:repeat(3, 38px)!important; }
+  html body .theme-switch .theme-opt{ min-width:0!important; padding:0!important; justify-content:center!important; }
+  html body .fx-system b{ display:none!important; }
+  html body .shell > .top:not(.side-right){ gap:10px!important; }
+  html body .shell > .top:not(.side-right) .tab{ padding:0 10px 0 9px!important; }
+}

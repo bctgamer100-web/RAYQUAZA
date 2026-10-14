@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "ORDER Workspace — ค้นหาสต็อก",
+  "short_name": "ค้นหาสต็อก",
+  "version": "2026.10.10.2",
+  "description": "กด Tab บนหน้าเว็บไหนก็ได้ (เช่น BigSeller) เพื่อค้นหาตำแหน่งในสต็อก เลือกตำแหน่ง แก้จำนวน และโหลดใบย้ายสินค้า — ใช้สต็อกจากฐานข้อมูล Plan Order ชุดเดียวกับ ORDER Workspace",
+  "permissions": ["storage", "downloads", "clipboardWrite"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js" },
+  "icons": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" },
+  "action": { "default_title": "ค้นหาสต็อก (หรือกด Tab บนหน้าเว็บ)", "default_icon": { "16": "icons/icon16.png", "32": "icons/icon32.png" } },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    },
+    {
+      "matches": ["https://*.bigseller.com/*"],
+      "js": ["page-hook.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    }
+  ]
+}

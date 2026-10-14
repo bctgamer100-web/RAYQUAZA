@@ -1,0 +1,115 @@
+/* RAYQUAZA LOCK — หน้าล็อก Master Ball + โหมดสลีป (คู่กับ js/rz-lock.js) */
+
+/* ระหว่างล็อก: ซ่อนแอปไว้ตั้งแต่ก่อนสคริปต์ทำงาน (index.html ใส่คลาส rz-locked ใน <head>) จะได้ไม่เห็นหน้าแอปแวบก่อน */
+html.rz-locked body .shell, html.rz-locked body .rz-buddy, html.rz-locked body .rz-dlg-wrap{ visibility:hidden!important; }
+html.rz-locked body{ overflow:hidden; }
+
+.rz-lock{
+  position:fixed; inset:0; z-index:2147483500; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+  padding:16px; color:#fff; overflow:hidden; user-select:none;
+  background:radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--rz-bar-from) 75%, #000), #030305 78%);
+  font-family:'Bai Jamjuree','Leelawadee UI',Tahoma,sans-serif;
+  animation:rzFade .35s;
+}
+.rz-lock.is-out{ animation:rzLockOut .6s ease-in forwards; }
+@keyframes rzLockOut{ to{ opacity:0; transform:scale(1.04); filter:blur(4px); } }
+.rz-lock-stars{
+  position:absolute; inset:0; opacity:.75; pointer-events:none;
+  background-image:radial-gradient(1.5px 1.5px at 12% 20%, #fff, transparent), radial-gradient(1px 1px at 30% 70%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 55% 15%, #fff, transparent), radial-gradient(1px 1px at 72% 55%, #fff, transparent),
+    radial-gradient(2px 2px at 88% 30%, #fff, transparent), radial-gradient(1px 1px at 40% 40%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 20% 85%, #fff, transparent), radial-gradient(1px 1px at 92% 80%, #fff, transparent),
+    radial-gradient(1px 1px at 64% 88%, #fff, transparent), radial-gradient(1.5px 1.5px at 6% 52%, #fff, transparent);
+  animation:rzTwinkle 4s ease-in-out infinite alternate;
+}
+.rz-lock-top{ position:absolute; top:28px; left:0; right:0; text-align:center; }
+.rz-lock-top b{ display:block; font:700 22px/1 'Chakra Petch',sans-serif; letter-spacing:.3em;
+  background:linear-gradient(90deg, var(--rz-ribbon-a), var(--rz-ribbon-b)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+.rz-lock-top span{ display:block; margin-top:6px; font:600 11px/1 'Chakra Petch',sans-serif; letter-spacing:.32em; opacity:.6; }
+
+/* ---------- Master Ball ---------- */
+.rz-lock-stage{ position:relative; width:220px; height:220px; display:grid; place-items:center; }
+.rz-lock-ball{ position:relative; width:170px; height:170px; animation:rzLockFloat 3.4s ease-in-out infinite; filter:drop-shadow(0 14px 18px rgba(0,0,0,.5)) drop-shadow(0 0 26px rgba(176,106,216,.45)); }
+@keyframes rzLockFloat{ 50%{ transform:translateY(-10px); } }
+.rz-lock-ball-in{ position:absolute; inset:0; transform-origin:50% 90%; }
+.rz-lock-ball i{ position:absolute; inset:0; background:url("../img/masterball-256.png?v=2") center/contain no-repeat; transition:transform .5s cubic-bezier(.3,1.4,.4,1), opacity .45s; }
+.rz-lock-ball i.t{ clip-path:polygon(0 0,100% 0,100% 63%,0 77%); transform-origin:12% 76%; }
+.rz-lock-ball i.b{ clip-path:polygon(0 77%,100% 63%,100% 100%,0 100%); }
+.rz-lock-btn{
+  position:absolute; left:32%; top:72%; width:24px; height:24px; margin:-12px 0 0 -12px; border-radius:50%;
+  background:#fff; opacity:0; box-shadow:0 0 16px #fff, 0 0 30px #ec5fa6;
+}
+.rz-lock-ball.is-tap .rz-lock-btn{ animation:rzLockBtn .35s ease-out; }
+.rz-lock-ball.is-tap .rz-lock-ball-in{ animation:rzLockTap .25s ease-out; }
+@keyframes rzLockBtn{ 0%{ opacity:.95 } 100%{ opacity:0 } }
+@keyframes rzLockTap{ 50%{ transform:scale(1.04) rotate(-3deg); } }
+/* กำลังตรวจรหัส: เขย่าลุ้น */
+.rz-lock-ball.is-check .rz-lock-ball-in{ animation:rzBallShake .32s ease-in-out 2; }
+.rz-lock-ball.is-check .rz-lock-btn{ animation:rzBtnBlink .16s steps(2) 4; }
+/* รหัสผิด: ส่ายปฏิเสธ + แสงแดง */
+.rz-lock-ball.is-no .rz-lock-ball-in{ animation:rzLockNo .5s ease-in-out; }
+.rz-lock-ball.is-no{ filter:drop-shadow(0 14px 18px rgba(0,0,0,.5)) drop-shadow(0 0 30px rgba(255,40,40,.75)); }
+@keyframes rzLockNo{ 15%,45%,75%{ transform:translateX(-14px) rotate(-6deg); } 30%,60%,90%{ transform:translateX(14px) rotate(6deg); } }
+/* รหัสถูก: บอลเปิด → แสงวาบ → มังกรออกมา */
+.rz-lock-flash{ position:absolute; left:50%; top:50%; width:600px; height:600px; margin:-300px 0 0 -300px; border-radius:50%; opacity:0; pointer-events:none;
+  background:radial-gradient(circle, #fff 0, #ffd6ef 16%, #b06ad8 36%, transparent 66%); }
+.rz-lock-mon{ position:absolute; left:50%; top:50%; width:min(70vw, 560px); transform:translate(-50%,-50%) scale(.02); opacity:0; pointer-events:none; z-index:2; }
+.rz-lock-mon img{ width:100%; display:block; }
+.rz-lock.is-open .rz-lock-ball{ animation:none; }
+.rz-lock.is-open .rz-lock-ball i.t{ transform:translateY(-46px) rotate(-40deg); opacity:0; }
+.rz-lock.is-open .rz-lock-ball i.b{ transform:translateY(26px); opacity:0; }
+.rz-lock.is-open .rz-lock-flash{ animation:rzBallFlash 1.1s ease-out forwards; }
+.rz-lock.is-open .rz-lock-mon{ animation:rzMonOut 1.2s cubic-bezier(.2,1.2,.3,1) .12s forwards; }
+.rz-lock.is-open .rz-lock-form, .rz-lock.is-open .rz-lock-top{ transition:opacity .3s; opacity:0; }
+
+/* ---------- ช่องรหัส (กล่องข้อความแบบเกม) ---------- */
+.rz-lock-form{ position:relative; z-index:3; width:min(440px, 100%); display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:6px; }
+.rz-lock-label{ font:700 15px/1.3 'Bai Jamjuree',sans-serif; text-align:center; text-shadow:0 2px 0 rgba(0,0,0,.4); }
+.rz-lock-field{
+  width:100%; display:flex; gap:8px; padding:8px;
+  background:var(--rz-dlg-bg); border:3px solid var(--rz-dlg-line); border-radius:12px;
+  box-shadow:inset 0 0 0 2px var(--rz-dlg-bg), inset 0 0 0 4px var(--rz-trim), 0 14px 34px rgba(0,0,0,.5);
+  flex-wrap:wrap;
+}
+html body .rz-lock input.rz-lock-in, html body .rz-lock input.rz-lock-in2{
+  flex:1 1 160px; min-width:0; height:46px; padding:0 14px!important; border:0!important; border-radius:6px!important; outline:none;
+  background:#fffaf0!important; color:#2a2420!important; -webkit-text-fill-color:#2a2420; box-shadow:inset 0 2px 4px rgba(0,0,0,.12)!important;
+  font:700 22px/1 'Chakra Petch',sans-serif!important; letter-spacing:.3em; text-align:center; user-select:text;
+}
+html body .rz-lock input.rz-lock-in::placeholder, html body .rz-lock input.rz-lock-in2::placeholder{ color:#b8aa98!important; letter-spacing:.1em; font-size:14px; }
+html body .rz-lock input:focus-visible{ outline:2px solid var(--rz-ribbon-a)!important; outline-offset:0; }
+html body .rz-lock button.rz-lock-go{
+  all:unset; box-sizing:border-box; flex:0 0 auto; height:46px; padding:0 22px!important; cursor:pointer; border-radius:6px!important;
+  background:linear-gradient(135deg, #b06ad8, #6a2c91)!important; color:#fff!important; font:700 16px/46px 'Bai Jamjuree',sans-serif!important;
+  box-shadow:0 3px 0 #3e1659!important; text-align:center;
+}
+html body .rz-lock button.rz-lock-go:hover{ filter:brightness(1.12); }
+html body .rz-lock button.rz-lock-go:disabled{ opacity:.6; cursor:progress; }
+.rz-lock-msg{ min-height:20px; margin:0; font-size:14px; font-weight:600; text-align:center; color:#ffe7a1; }
+.rz-lock-msg.is-bad{ color:#ff8a7a; animation:rzBuddyShake .1s linear 3; }
+html body .rz-lock button.rz-lock-link{
+  all:unset; cursor:pointer; padding:4px 6px!important; min-height:0!important; height:auto!important;
+  background:transparent!important; border:0!important; box-shadow:none!important; clip-path:none!important;
+  font:600 13px/1.3 'Bai Jamjuree',sans-serif!important; color:rgba(255,255,255,.65)!important; text-decoration:underline; text-underline-offset:3px;
+}
+.rz-lock.is-setup .rz-lock-field{ flex-direction:column; }
+.rz-lock.is-setup .rz-lock-field input{ flex:0 0 auto!important; width:100%; }
+html body .rz-lock button.rz-lock-link:hover{ color:#fff; }
+
+/* ---------- โหมดสลีป ---------- */
+.rz-lock.is-sleep{ cursor:none; }
+.rz-lock-sleepmon{ position:relative; width:min(44vw, 400px); }
+.rz-lock-sleepmon img{ width:100%; display:block; filter:brightness(.5) saturate(.75) drop-shadow(0 0 30px color-mix(in srgb, var(--rz-ribbon-b) 40%, transparent)); animation:rzBreath 5s ease-in-out infinite; }
+.rz-lock-z{ position:absolute; right:12%; top:10%; font:700 28px/1 'Chakra Petch',sans-serif; color:var(--rz-ribbon-a); opacity:0; animation:rzZzz 3.6s ease-in-out infinite; }
+.rz-lock-z.z2{ font-size:38px; animation-delay:1.2s; } .rz-lock-z.z3{ font-size:22px; animation-delay:2.4s; }
+.rz-lock-clock{ text-align:center; }
+.rz-lock-clock b{ display:block; font:700 clamp(56px, 10vw, 120px)/1 'Chakra Petch',sans-serif; letter-spacing:.06em; text-shadow:0 0 30px color-mix(in srgb, var(--rz-ribbon-b) 50%, transparent); }
+.rz-lock-clock span{ font-size:16px; opacity:.75; }
+.rz-lock-hint{ margin:6px 0 0; font-size:14px; opacity:.6; }
+
+/* ปุ่มในแผงตั้งค่า */
+html body .rz-lock-set .rz-lock-setbtns button, html body .rz-lock-set .rz-lock-now{ margin-right:6px; }
+
+@media (prefers-reduced-motion:reduce){
+  .rz-lock, .rz-lock *{ animation:none!important; transition:none!important; }
+}

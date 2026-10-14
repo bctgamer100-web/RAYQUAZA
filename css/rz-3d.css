@@ -1,0 +1,57 @@
+/* RAYQUAZA 3D — คู่กับ js/rz-3d.js (ฉากท้องฟ้า 3D + การ์ดเอียง) ทำงานเมื่อ html มีทั้ง rz-fx-on และ rz-3d-on */
+
+/* ฉากท้องฟ้า: อยู่หลังเนื้อหา (.shell z-index:1) ทับพื้นหลังเดิมแบบโปร่งแสง เรนเดอร์ความละเอียดต่ำแล้วขยายให้นุ่ม */
+#rz3d{ position:fixed; inset:0; width:100vw; height:100vh; z-index:0; pointer-events:none; }
+html:not(.rz-fx-on) #rz3d, html:not(.rz-3d-on) #rz3d{ display:none!important; }
+
+.rz-3d-toggle{ margin-left:-10px; }
+
+@media (prefers-reduced-motion:no-preference){
+
+  /* การ์ดเอียงตามเมาส์ */
+  html.rz-fx-on.rz-3d-on body .rz-tilt{
+    position:relative;
+    transform:perspective(700px) rotateX(var(--rz-rx,0deg)) rotateY(var(--rz-ry,0deg)) translateY(-3px)!important;
+    transition:transform .12s ease-out, box-shadow .25s!important;
+    will-change:transform;
+  }
+  html.rz-fx-on.rz-3d-on body .beta-stat,
+  html.rz-fx-on.rz-3d-on body .sun-imp-card,
+  html.rz-fx-on.rz-3d-on body .quick-status-item,
+  html.rz-fx-on.rz-3d-on body .stat{
+    transition:transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .25s;
+  }
+
+  /* แสงสะท้อนบนการ์ด เลื่อนตามเมาส์ */
+  .rz-glare{
+    position:absolute; inset:0; pointer-events:none; z-index:2; opacity:0;
+    background:radial-gradient(circle at var(--rz-gx,50%) var(--rz-gy,50%), color-mix(in srgb, var(--rz-ribbon-a) 26%, transparent), transparent 58%);
+    mix-blend-mode:screen; transition:opacity .25s;
+  }
+  html.rz-fx-on.rz-3d-on body .rz-tilt > .rz-glare{ opacity:1; }
+  html[data-prod-theme="light"] .rz-glare{
+    background:radial-gradient(circle at var(--rz-gx,50%) var(--rz-gy,50%), rgba(255,250,220,.45), transparent 58%);
+  }
+}
+html:not(.rz-3d-on) .rz-glare, html:not(.rz-fx-on) .rz-glare{ display:none; }
+
+/* ---------- โหมด 3D: พื้นหลังหน้าโปร่ง + การ์ดเป็นกระจกฝ้า มองเห็นท้องฟ้า 3D ข้างหลัง ---------- */
+html.rz-fx-on.rz-3d-on body .panel-wrap{ background:transparent!important; }
+html.rz-fx-on.rz-3d-on body .beta-card,
+html.rz-fx-on.rz-3d-on body .sun-imp-card,
+html.rz-fx-on.rz-3d-on body .sun-imp-bar,
+html.rz-fx-on.rz-3d-on body .sun-card,
+html.rz-fx-on.rz-3d-on body .saved-files,
+html.rz-fx-on.rz-3d-on body .order-filter-card,
+html.rz-fx-on.rz-3d-on body .order-filter-wrap,
+html.rz-fx-on.rz-3d-on body .beta-stat,
+html.rz-fx-on.rz-3d-on body .card,
+html.rz-fx-on.rz-3d-on body .summary-stats > *,
+html.rz-fx-on.rz-3d-on body .before-order-stats > *,
+html.rz-fx-on.rz-3d-on body .scan-stats > *,
+html.rz-fx-on.rz-3d-on body .download-box,
+html.rz-fx-on.rz-3d-on body .compare-preview-section{
+  background:linear-gradient(165deg, color-mix(in srgb, var(--surface-2) 80%, transparent), color-mix(in srgb, var(--surface) 70%, transparent))!important;
+  -webkit-backdrop-filter:blur(7px) saturate(1.15);
+  backdrop-filter:blur(7px) saturate(1.15);
+}

@@ -1,0 +1,69 @@
+/* RAYQUAZA BACKDROP — ภาพศึกสามตำนาน หน้า ตรวจ ORDER กับ Stock (คู่กับ js/rz-backdrop.js) */
+
+.rz-legends{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; display:none; background:#07040a; }
+html.rz-legends-on .rz-legends{ display:block; }
+/* ภาพกว้างเต็มจอ ชิดบน ขอบล่างจางหายเข้าพื้นมืด (ไม่ครอปด้านข้าง เห็นครบทั้งสามตัว) */
+.rz-lg-stage{
+  position:absolute; left:50%; top:40px; width:max(100vw, 1100px); aspect-ratio:1280/492; transform:translateX(-50%);
+  -webkit-mask:linear-gradient(180deg, #000 0, #000 72%, transparent 100%); mask:linear-gradient(180deg, #000 0, #000 72%, transparent 100%);
+  animation:rzLgKen 32s ease-in-out infinite alternate;
+}
+.rz-lg-stage img{ position:absolute; inset:0; width:100%; height:100%; display:block; filter:saturate(1.15) contrast(1.05); }
+@keyframes rzLgKen{ from{ transform:translateX(-50%) scale(1) } to{ transform:translateX(-50%) scale(1.06) translateY(-1.5%) } }
+.rz-lg-fx{ position:absolute; inset:0; }
+/* ทำให้เนื้อหาอ่านง่าย: มืดลงเล็กน้อย + ขอบมืด */
+.rz-lg-dim{ position:absolute; inset:0; background:radial-gradient(ellipse at 50% 30%, transparent 30%, rgba(0,0,0,.55) 100%), linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.42)); }
+html[data-prod-theme="light"] .rz-lg-dim{ background:radial-gradient(ellipse at 50% 30%, transparent 35%, rgba(0,0,0,.45) 100%), linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.3)); }
+
+/* ---------- ออร่าแต่ละจุด ---------- */
+.rz-lg-spot{ position:absolute; width:10%; aspect-ratio:1; transform:translate(-50%,-50%); border-radius:50%; mix-blend-mode:screen; }
+/* ไคโอกา: ลูกแก้วเต้นเป็นจังหวะ ปากเรืองฟ้า ทะเลด้านล่างระยิบ */
+.rz-lg-spot.k-orb{ width:9%; background:radial-gradient(circle, rgba(255,240,210,.95) 0, rgba(140,190,255,.6) 30%, transparent 70%); animation:rzLgPulse 3.2s ease-in-out infinite; }
+.rz-lg-spot.k-mouth{ width:12%; background:radial-gradient(circle, rgba(200,235,255,.8) 0, rgba(60,140,255,.45) 35%, transparent 70%); animation:rzLgPulse 4.4s ease-in-out .6s infinite; }
+.rz-lg-spot.k-sea{ width:40%; aspect-ratio:3/1; border-radius:50%; background:radial-gradient(ellipse, rgba(120,90,255,.35), transparent 70%); animation:rzLgWave 6s ease-in-out infinite alternate; }
+/* RAYQUAZA: แกนพลังสว่างวาบ + วงแสงหมุน + ริบบิ้นเรือง */
+.rz-lg-spot.r-core{ width:9%; background:radial-gradient(circle, #fffde0 0, rgba(220,255,90,.9) 18%, rgba(120,255,60,.45) 40%, transparent 70%); animation:rzLgFlare 2.2s ease-in-out infinite; }
+.rz-lg-spot.r-ring{ width:16%; background:conic-gradient(from 0deg, transparent 0 10%, rgba(200,255,90,.35) 12%, transparent 16% 35%, rgba(200,255,90,.3) 37%, transparent 41% 60%, rgba(200,255,90,.35) 62%, transparent 66% 85%, rgba(200,255,90,.3) 87%, transparent 91%);
+  -webkit-mask:radial-gradient(circle, transparent 30%, #000 32% 70%, transparent 72%); mask:radial-gradient(circle, transparent 30%, #000 32% 70%, transparent 72%); animation:rzLgSpin 9s linear infinite; }
+.rz-lg-spot.r-ribbon{ width:22%; aspect-ratio:1.6; border-radius:50%; background:radial-gradient(ellipse, rgba(190,255,80,.32), transparent 70%); animation:rzLgPulse 3.6s ease-in-out .3s infinite; }
+/* สายฟ้าม่วงวาบเป็นระยะ */
+.rz-lg-spot.bolt{ width:16%; aspect-ratio:1; background:radial-gradient(circle, rgba(220,170,255,.85) 0, rgba(150,80,255,.45) 30%, transparent 70%); opacity:0; animation:rzLgBolt 5.5s steps(1) infinite; }
+/* กราดอน: หน้าไฟสั่นไหว ลาวาลุกโชน พื้นลาวาเรือง */
+.rz-lg-spot.g-face{ width:12%; background:radial-gradient(circle, rgba(255,240,170,.95) 0, rgba(255,140,30,.6) 30%, transparent 70%); animation:rzLgFire 1.3s ease-in-out infinite; }
+.rz-lg-spot.g-lava{ width:26%; background:radial-gradient(circle, rgba(255,180,60,.65) 0, rgba(255,80,0,.35) 35%, transparent 70%); animation:rzLgFire 2.6s ease-in-out .4s infinite; }
+.rz-lg-spot.g-claw{ width:14%; background:radial-gradient(circle, rgba(255,120,20,.45), transparent 70%); animation:rzLgFire 1.8s ease-in-out .9s infinite; }
+.rz-lg-spot.g-ground{ width:44%; aspect-ratio:3/1; border-radius:50%; background:radial-gradient(ellipse, rgba(255,110,20,.45), transparent 70%); animation:rzLgWave 3.4s ease-in-out infinite alternate; }
+
+@keyframes rzLgPulse{ 0%,100%{ opacity:.55; transform:translate(-50%,-50%) scale(.9) } 50%{ opacity:1; transform:translate(-50%,-50%) scale(1.12) } }
+@keyframes rzLgFlare{ 0%,100%{ opacity:.7; transform:translate(-50%,-50%) scale(.85) } 45%{ opacity:1; transform:translate(-50%,-50%) scale(1.25) } 55%{ opacity:.85 } }
+@keyframes rzLgSpin{ to{ transform:translate(-50%,-50%) rotate(360deg) } }
+@keyframes rzLgFire{ 0%,100%{ opacity:.65; transform:translate(-50%,-50%) scale(.95) } 25%{ opacity:1; transform:translate(-50%,-52%) scale(1.06) } 60%{ opacity:.75; transform:translate(-50%,-49%) scale(1) } 80%{ opacity:.95 } }
+@keyframes rzLgWave{ from{ opacity:.45; transform:translate(-52%,-50%) } to{ opacity:.9; transform:translate(-48%,-50%) } }
+@keyframes rzLgBolt{ 0%,62%,66%,70%,100%{ opacity:0 } 63%,68%{ opacity:1 } }
+
+/* หน้านี้: เอาพื้นหลังเดิม/ท้องฟ้า 3D ออก ให้เห็นภาพชัด · การ์ดเป็นกระจกมืดลงนิดให้อ่านง่าย */
+html.rz-legends-on #rz3d{ display:none!important; }
+html.rz-legends-on body :is(#compareTool) .rz-panel:not(.rz-placeholder){ background:linear-gradient(170deg, color-mix(in srgb, var(--surface-2) 78%, transparent), color-mix(in srgb, var(--surface) 70%, transparent))!important; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
+html.rz-legends-on body #compareTool .rz-placeholder{ background:color-mix(in srgb, var(--surface) 35%, transparent)!important; backdrop-filter:blur(4px); }
+html.rz-legends-on body #compareTool .rz-hero{ background:linear-gradient(115deg, color-mix(in srgb, var(--rz-bar-from) 70%, transparent) 0%, color-mix(in srgb, var(--rz-bar-to) 45%, transparent) 60%, transparent 100%)!important; backdrop-filter:blur(3px); }
+html.rz-legends-on body #compareTool .rz-hero-art{ display:none; } /* ภาพพื้นหลังมีมังกรอยู่แล้ว */
+
+/* โหมดโฟกัส / ลดการเคลื่อนไหว: ภาพนิ่ง */
+html.rz-focus .rz-legends *, html.rz-focus .rz-lg-stage{ animation:none!important; }
+html.rz-focus .rz-lg-fx{ display:none; }
+@media (prefers-reduced-motion:reduce){ .rz-legends *, .rz-lg-stage{ animation:none!important; } .rz-lg-fx{ display:none; } }
+
+/* กรอบหน้าเดิมทึบ (โปร่งแค่ตอนเปิด 3D) — หน้านี้ต้องโปร่งเสมอถึงจะเห็นภาพพื้นหลัง */
+html.rz-legends-on body .panel-wrap:not(#rzx), html.rz-legends-on body:not(#rzx){ background:transparent!important; background-image:none!important; }
+
+/* โหมดกลางวันบนภาพมืด: การ์ดเป็นกระจกฝ้าสีขาว ตัวหนังสือเข้ม อ่านง่ายกว่ากระจกเขียว */
+html.rz-legends-on[data-prod-theme="light"] body #compareTool .rz-panel:not(.rz-placeholder):not(.rz-panel-bare){
+  background:linear-gradient(170deg, rgba(246,252,249,.86), rgba(230,244,238,.8))!important; border-color:rgba(255,255,255,.6)!important;
+}
+html.rz-legends-on[data-prod-theme="light"] body #compareTool .rz-placeholder{ background:rgba(246,252,249,.55)!important; border-color:rgba(255,255,255,.55)!important; }
+html.rz-legends-on[data-prod-theme="light"] body #compareTool .rz-col-title{ color:#fff!important; text-shadow:0 1px 3px rgba(0,0,0,.7); }
+html.rz-legends-on[data-prod-theme="light"] body #compareTool #compareStatus{ color:#fff!important; text-shadow:0 1px 3px rgba(0,0,0,.7); }
+/* โหมดไชนี่: กระจกดำโปร่ง */
+html.rz-legends-on:not([data-prod-theme="light"]) body #compareTool .rz-panel:not(.rz-placeholder):not(.rz-panel-bare){
+  background:linear-gradient(170deg, rgba(20,14,22,.78), rgba(12,9,14,.72))!important;
+}

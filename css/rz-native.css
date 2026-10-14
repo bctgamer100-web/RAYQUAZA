@@ -1,0 +1,136 @@
+/* RAYQUAZA NATIVE — ให้ส่วนที่เบราว์เซอร์วาดเอง (dropdown, ตัวเลือกเวลา/วันที่, กรอบโฟกัส, autofill ฯลฯ) เข้าธีม
+   คู่กับ js/rz-picker.js (ตัวเลือกเวลา/วันที่ของธีมเอง) · โหลดหลังสุด */
+
+/* ให้ส่วนประกอบของเบราว์เซอร์ (ปุ่มเลื่อนตัวเลข, ไอคอน, เมนูคลิกขวาในช่อง) เป็นโหมดมืด/สว่างตามธีม */
+:root{ color-scheme:dark; accent-color:var(--accent); }
+html[data-prod-theme="light"]{ color-scheme:light; accent-color:var(--accent); }
+html body input[type="checkbox"], html body input[type="radio"]{ accent-color:var(--accent)!important; }
+
+/* ---------- dropdown (select) ---------- */
+html body option{ background:var(--surface)!important; color:var(--foreground)!important; }
+html body option:checked{ background:var(--accent)!important; color:var(--accent-fg)!important; }
+
+/* เบราว์เซอร์ที่รองรับ select แบบปรับแต่งได้ (Chrome/Edge 135+): แต่งรายการที่เด้งออกมาได้ทั้งหมด */
+@supports (appearance:base-select){
+  html body select, ::picker(select){ appearance:base-select; }
+  html body select{ display:inline-flex; align-items:center; gap:6px; }
+  html body select::picker-icon{ color:var(--rz-ribbon-a); transition:rotate .2s; }
+  html body select:open::picker-icon{ rotate:180deg; }
+  ::picker(select){
+    margin-top:4px; padding:5px; max-height:min(360px, 60vh);
+    background:linear-gradient(165deg, var(--surface-2), var(--surface));
+    color:var(--foreground);
+    border:1px solid var(--rz-trim); border-radius:4px;
+    box-shadow:inset 3px 0 0 var(--rz-trim), 0 14px 34px rgba(0,0,0,.4), 0 0 18px color-mix(in srgb, var(--rz-ribbon-b) 22%, transparent);
+    font-family:'Bai Jamjuree','Leelawadee UI',Tahoma,sans-serif;
+  }
+  html body option{
+    display:flex; align-items:center; gap:8px;
+    padding:7px 12px!important; border-radius:3px; min-height:0;
+    background:transparent!important; color:var(--foreground)!important; cursor:pointer;
+  }
+  html body option:hover, html body option:focus-visible{
+    background:color-mix(in srgb, var(--rz-ribbon-a) 18%, transparent)!important; outline:none;
+  }
+  html body option:checked{
+    background:linear-gradient(135deg, var(--accent-bright), var(--accent))!important;
+    color:var(--accent-fg)!important; font-weight:700;
+  }
+  html body option::checkmark{ color:inherit; }
+  html body option:disabled{ opacity:.45; }
+}
+
+/* ---------- ช่องเวลา/วันที่: ใช้ตัวเลือกของธีม (rz-picker.js) แทนของเบราว์เซอร์ ---------- */
+html body input[type="time"]:not(#rzx):not(#rzy), html body input[type="date"]:not(#rzx):not(#rzy){
+  cursor:pointer;
+  padding-right:28px!important;
+  background-repeat:no-repeat!important;
+  background-position:right 8px center!important;
+  background-size:15px 15px!important;
+}
+html body input[type="time"]:not(#rzx):not(#rzy){ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffd34d' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E")!important; }
+html body input[type="date"]:not(#rzx):not(#rzy){ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffd34d' stroke-width='2.2' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E")!important; }
+html[data-prod-theme="light"] body input[type="time"]:not(#rzx):not(#rzy){ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314493d' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E")!important; }
+html[data-prod-theme="light"] body input[type="date"]:not(#rzx):not(#rzy){ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314493d' stroke-width='2.2' stroke-linecap='round'%3E%3Crect x='3' y='5' width='18' height='16' rx='2'/%3E%3Cpath d='M3 10h18M8 3v4M16 3v4'/%3E%3C/svg%3E")!important; }
+html body input[type="time"]::-webkit-calendar-picker-indicator,
+html body input[type="date"]::-webkit-calendar-picker-indicator{ display:none; }
+html body input[type="time"]::-webkit-datetime-edit-hour-field:focus,
+html body input[type="time"]::-webkit-datetime-edit-minute-field:focus,
+html body input[type="time"]::-webkit-datetime-edit-ampm-field:focus,
+html body input[type="date"]::-webkit-datetime-edit-day-field:focus,
+html body input[type="date"]::-webkit-datetime-edit-month-field:focus,
+html body input[type="date"]::-webkit-datetime-edit-year-field:focus{
+  background:var(--rz-ribbon-a); color:#1a0600; border-radius:2px;
+}
+
+/* ---------- กรอบโฟกัส · autofill · ปุ่มเลือกไฟล์ ---------- */
+html body :focus-visible{ outline:2px solid var(--rz-ribbon-a)!important; outline-offset:2px; }
+html body input:focus-visible, html body select:focus-visible, html body textarea:focus-visible{ outline-offset:0; }
+html body input:-webkit-autofill,
+html body input:-webkit-autofill:hover,
+html body input:-webkit-autofill:focus{
+  -webkit-box-shadow:0 0 0 60px var(--surface) inset!important;
+  -webkit-text-fill-color:var(--foreground)!important;
+  caret-color:var(--foreground);
+}
+html body input::file-selector-button{
+  margin-right:10px; padding:6px 12px; border:0; border-radius:2px; cursor:pointer;
+  background:linear-gradient(135deg, var(--accent-bright), var(--accent)); color:var(--accent-fg); font-weight:700;
+}
+html body summary::marker{ color:var(--rz-ribbon-a); }
+
+/* ================= ตัวเลือกเวลา/วันที่ของธีม (rz-picker.js) ================= */
+.rz-pick{
+  position:fixed; z-index:2147482990; min-width:220px;
+  padding:10px; color:var(--foreground);
+  background:linear-gradient(165deg, var(--surface-2), var(--surface));
+  border:1px solid var(--rz-trim); border-radius:4px;
+  box-shadow:inset 3px 0 0 var(--rz-trim), 0 16px 40px rgba(0,0,0,.45), 0 0 20px color-mix(in srgb, var(--rz-ribbon-b) 24%, transparent);
+  font:500 14px/1.2 'Bai Jamjuree','Leelawadee UI',Tahoma,sans-serif;
+  animation:rzPickIn .16s cubic-bezier(.2,.9,.2,1);
+  user-select:none;
+}
+@keyframes rzPickIn{ from{ opacity:0; transform:translateY(-6px) } }
+.rz-pick-head{
+  display:flex; align-items:center; justify-content:space-between; gap:8px; margin:0 0 8px;
+  font:700 12px/1 'Chakra Petch',sans-serif; letter-spacing:.14em; color:var(--rz-ribbon-a);
+}
+.rz-pick-head b{ font-size:15px; letter-spacing:.04em; color:var(--foreground); }
+/* ล้างสไตล์ปุ่มทั่วไปของแอป (ใช้ !important เยอะ) ไม่ให้รั่วเข้ามาในกล่องเลือก */
+html body .rz-pick button{
+  all:unset; box-sizing:border-box!important; display:block; text-align:center;
+  font:inherit!important; color:inherit!important; background:transparent!important; border:0!important;
+  min-height:0!important; height:auto; padding:0!important; margin:0!important; box-shadow:none!important;
+  clip-path:none!important; transform:none!important; filter:none!important; letter-spacing:normal!important;
+  cursor:pointer; border-radius:3px!important;
+}
+html body .rz-pick button:disabled{ opacity:.35; cursor:default; }
+html body .rz-pick button:focus-visible{ outline:2px solid var(--rz-ribbon-a)!important; outline-offset:-2px; }
+.rz-pick-cols{ display:flex; gap:8px; }
+.rz-pick-col{
+  flex:1; height:216px; overflow-y:auto; padding:2px;
+  border:1px solid var(--border); border-radius:3px; background:color-mix(in srgb, var(--background) 60%, transparent);
+  scrollbar-width:thin;
+}
+.rz-pick-col small{ display:block; text-align:center; padding:4px 0 6px; font:700 10px/1 'Chakra Petch',sans-serif; letter-spacing:.2em; color:var(--muted); }
+html body .rz-pick-col button{ width:100%; padding:6px 0!important; font-variant-numeric:tabular-nums; font-size:15px!important; }
+.rz-pick button:hover:not(:disabled){ background:color-mix(in srgb, var(--rz-ribbon-a) 18%, transparent); }
+html body .rz-pick button.is-on{
+  background:linear-gradient(135deg, var(--accent-bright), var(--accent))!important; color:var(--accent-fg); font-weight:700;
+  box-shadow:0 0 10px color-mix(in srgb, var(--rz-ribbon-b) 45%, transparent);
+}
+.rz-pick-foot{ display:flex; gap:6px; margin-top:10px; }
+html body .rz-pick-foot button{ flex:1; padding:7px 0!important; border:1px solid var(--border)!important; font-size:13px!important; }
+.rz-pick-foot{ display:flex; gap:6px; }
+html body .rz-pick-foot button.rz-pick-ok{
+  border:0!important; background:linear-gradient(135deg, var(--accent-bright), var(--accent))!important; color:var(--accent-fg)!important; font-weight:700!important;
+}
+/* ปฏิทิน */
+.rz-pick-date{ width:272px; }
+html body .rz-pick-nav{ width:30px; height:28px; line-height:28px; font-size:20px!important; color:var(--rz-ribbon-a)!important; }
+.rz-pick-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
+.rz-pick-grid > span{ text-align:center; padding:4px 0; font:700 11px/1 'Chakra Petch',sans-serif; color:var(--muted); }
+.rz-pick-grid > span:first-child{ color:var(--danger); }
+html body .rz-pick-grid button{ height:32px; line-height:32px; font-variant-numeric:tabular-nums; }
+html body .rz-pick-grid button.is-out{ opacity:.35; }
+html body .rz-pick-grid button.is-today{ box-shadow:inset 0 0 0 1.5px var(--rz-ribbon-a); }

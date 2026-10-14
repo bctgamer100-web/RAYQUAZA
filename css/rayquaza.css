@@ -1,0 +1,123 @@
+/* ธีม RAYQUAZA — ใช้สีตามตัวมังกรจริง
+   - โหมดกลางวัน = MEGA RAYQUAZA ปกติ: ลำตัวเขียวมรกต/ฟ้าอมเขียว · ครีบเขียวเข้ม · ขอบทอง/น้ำตาลทอง · ท้องเทาดำ
+                    ริบบิ้นเหลืองทองและส้มพีช
+   - โหมดกลางคืน = MEGA RAYQUAZA ไชนี่: ลำตัวดำ · เส้นขอบแดง · ริบบิ้นส้มและเหลืองทอง
+   --rz-trim = สีเส้นขอบ/ลายของลำตัว (ทองในโหมดกลางวัน, แดงในโหมดกลางคืน)
+   โหลดหลังไฟล์ CSS อื่นทั้งหมด จึงทับตัวแปรสีได้โดยไม่ต้องแก้ style.css / sunshine.css / theme-light.css */
+
+/* ---------- กลางคืน: MEGA ไชนี่ (ดำ · แดง · ส้ม · เหลืองทอง) ---------- */
+:root{
+  --rz-trim:#e0301e;
+  --rz-bar-from:#141012;
+  --rz-bar-to:#0a0809;
+  --rz-ribbon-a:#ffd34d;
+  --rz-ribbon-b:#ff8a3d;
+
+  --background:#08080a;
+  --sidebar:#0b0a0c;
+  --surface:#121014;
+  --surface-2:#18151a;
+  --surface-3:#201c22;
+  --border:#3d1f1e;
+  --border-soft:#2a1716;
+  --foreground:#fff3e4;
+  --muted:#c2aea0;
+  --muted-2:#8a766b;
+  --primary:#ff6a2a;
+  --primary-fg:#1a0600;
+  --accent:#ff5a2c;
+  --accent-bright:#ff8a4d;
+  --accent-deep:#d6381a;
+  --accent-fg:#1a0600;
+  --accent-soft:rgba(255,90,44,.16);
+  --success:#c8e66a;
+  --danger:#ff6b6b;
+  --neutral-label:#a58f82;
+
+  --v7-bg:#050506;
+  --v7-panel:#0e0c10;
+  --v7-panel-2:#141116;
+  --v7-panel-3:#0a090b;
+  --v7-line:#40201f;
+  --v7-line-soft:#2b1716;
+  --v7-text:#fff3e4;
+  --v7-muted:#a99588;
+  --v7-blue:#ff5a2c;
+  --v7-teal:#ffd34d;
+  --v7-violet:#ff8a3d;
+  --v7-amber:#ffb020;
+  --v7-red:#ff4040;
+}
+
+/* ---------- กลางวัน: MEGA ปกติ (เขียวมรกต · เขียวเข้ม · ทอง · เหลือง · ส้มพีช) — ไม่มีสีขาว ---------- */
+html[data-prod-theme="light"]{
+  --rz-trim:#c8a35a;
+  --rz-bar-from:#1f7a65;
+  --rz-bar-to:#14493d;
+  --rz-ribbon-a:#ffd24a;
+  --rz-ribbon-b:#f3a35a;
+  --rz-cream:#ffe7a1;
+
+  --background:#3aa88e;
+  --sidebar:#1d6b58;
+  --surface:#6cc7ab;
+  --surface-2:#5ebb9f;
+  --surface-3:#4fae92;
+  --border:#2f8a72;
+  --border-soft:#46a589;
+  --foreground:#0b1f19;
+  --muted:#143d31;
+  --muted-2:#235a49;
+  --primary:#1d6b58;
+  --primary-fg:#ffe7a1;
+  --accent:#1d6b58;
+  --accent-bright:#2f9c83;
+  --accent-deep:#14493d;
+  --accent-fg:#ffe7a1;
+  --accent-soft:rgba(20,73,61,.22);
+  --success:#14493d;
+  --danger:#8f1d12;
+  --neutral-label:#1f5646;
+
+  --v7-bg:#3aa88e;
+  --v7-panel:#6cc7ab;
+  --v7-panel-2:#5ebb9f;
+  --v7-panel-3:#74cdb2;
+  --v7-line:#2f8a72;
+  --v7-line-soft:#46a589;
+  --v7-text:#0b1f19;
+  --v7-muted:#143d31;
+  --v7-blue:#1d6b58;
+  --v7-teal:#ffd24a;
+  --v7-violet:#f3a35a;
+  --v7-amber:#c8a35a;
+  --v7-red:#a8281a;
+}
+/* ชื่อแบรนด์: ไล่เฉดตามริบบิ้นของตัว */
+.brand-copy b{
+  letter-spacing:.1em;
+  background:linear-gradient(90deg,var(--rz-ribbon-a),var(--rz-ribbon-b));
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+}
+.brand-mark{ color:var(--rz-trim); }
+
+/* ---------- ตัวแปรสำหรับส่วนขยาย "ค้นหาสต็อก" (กล่องใน Shadow DOM สืบทอดตัวแปรจากหน้านี้) ----------
+   ส่วนขยายอ่าน --rzp-* ถ้าหน้าไหนไม่มี (เช่น BigSeller) จะใช้สีฟ้าเดิมของมัน */
+:root{
+  --rzp-bg:var(--surface);
+  --rzp-fg:var(--foreground);
+  --rzp-accent:var(--accent);
+  --rzp-accent-soft:var(--accent-soft);
+  --rzp-accent-fg:var(--accent-fg);
+  --rzp-line:var(--border);
+  --rzp-line2:var(--border);
+  --rzp-line-soft:var(--border-soft);
+  --rzp-muted:var(--muted);
+  --rzp-muted2:var(--muted-2);
+  --rzp-input:var(--background);
+  --rzp-font:'Bai Jamjuree','Leelawadee UI','Segoe UI',Tahoma,sans-serif;
+  --rzp-radius:3px;
+}

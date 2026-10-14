@@ -1,0 +1,143 @@
+/* RAYQUAZA EPIC — คู่กับ js/rz-epic.js (MEGA EVOLUTION · METEOR CRISIS · COMBO · ฉากเปลี่ยนหน้า · การ์ดโฮโลแกรม) */
+
+/* ================= MEGA EVOLUTION ================= */
+.rz-epic-evo{ position:fixed; inset:0; z-index:2147483100; display:grid; place-items:center; overflow:hidden; cursor:pointer; }
+.rz-epic-evo.is-out{ animation:rzFadeOut .5s forwards; }
+.rz-evo-bg{ position:absolute; inset:0; background:radial-gradient(circle at 50% 50%, rgba(40,10,60,.95), rgba(0,0,0,.98) 70%); animation:rzFade .3s; }
+.rz-epic-evo.is-light .rz-evo-bg{ background:radial-gradient(circle at 50% 50%, rgba(20,80,60,.95), rgba(0,10,8,.98) 70%); }
+/* วงแหวน DNA สีรุ้ง (สัญลักษณ์เมก้า) */
+.rz-evo-dna{
+  position:absolute; width:min(70vmin, 620px); aspect-ratio:1; border-radius:50%;
+  background:conic-gradient(from 0deg, #ff4a6a, #ffb84a, #fff04a, #4aff8a, #4ad8ff, #8a4aff, #ff4ad8, #ff4a6a);
+  -webkit-mask:radial-gradient(circle, transparent 0 60%, #000 61% 66%, transparent 67% 74%, #000 75% 78%, transparent 79%);
+  mask:radial-gradient(circle, transparent 0 60%, #000 61% 66%, transparent 67% 74%, #000 75% 78%, transparent 79%);
+  filter:drop-shadow(0 0 18px rgba(255,255,255,.6)); opacity:0;
+  animation:rzDnaIn .5s .15s forwards, rzDnaSpin 2.4s linear infinite;
+}
+.rz-evo-dna.d2{ width:min(50vmin, 440px); animation:rzDnaIn .5s .3s forwards, rzDnaSpin 1.6s linear infinite reverse; }
+@keyframes rzDnaIn{ from{ opacity:0; transform:scale(.3) } to{ opacity:1 } }
+@keyframes rzDnaSpin{ to{ rotate:360deg } }
+.rz-evo-stone{ position:absolute; width:90px; opacity:0; filter:drop-shadow(0 0 20px #fff) drop-shadow(0 0 40px #b06ad8); animation:rzStone 1.2s cubic-bezier(.2,1.4,.3,1) forwards; z-index:3; }
+@keyframes rzStone{ 0%{ opacity:0; transform:scale(.2) rotate(-180deg) } 40%{ opacity:1; transform:scale(1.2) rotate(0) } 80%{ opacity:1; transform:scale(1) } 100%{ opacity:0; transform:scale(2.5) } }
+/* ร่างเดิม: เงาขาวเรืองแสง → แตก */
+.rz-evo-old{ position:absolute; width:min(56vmin, 480px); opacity:0; filter:brightness(0) invert(1) drop-shadow(0 0 24px #fff) drop-shadow(0 0 50px #b06ad8); animation:rzEvoOld 1.3s ease-in forwards; z-index:2; }
+@keyframes rzEvoOld{ 0%{ opacity:0; transform:scale(.8) } 20%{ opacity:1 } 60%{ transform:scale(1.02) } 75%{ transform:scale(1.06); opacity:1 } 100%{ transform:scale(1.25); opacity:0 } }
+.rz-evo-shards i{
+  position:absolute; left:50%; top:50%; width:22px; height:34px; margin:-17px 0 0 -11px; opacity:0; z-index:4;
+  background:linear-gradient(160deg, #fff, #e8d8ff); clip-path:polygon(50% 0,100% 40%,70% 100%,0 70%);
+  box-shadow:0 0 12px #fff; animation:rzShard .9s cubic-bezier(.2,.8,.3,1) 1.1s forwards;
+}
+@keyframes rzShard{ 0%{ opacity:1; transform:translate(0,0) rotate(0) } 100%{ opacity:0; transform:translate(var(--dx), var(--dy)) rotate(var(--r)) scale(.4) } }
+.rz-evo-flash{ position:absolute; inset:0; background:#fff; opacity:0; animation:rzEvoFlash 1s ease-out 1.1s forwards; z-index:5; pointer-events:none; }
+@keyframes rzEvoFlash{ 0%{ opacity:0 } 15%{ opacity:1 } 100%{ opacity:0 } }
+/* ร่างใหม่ */
+.rz-evo-new{ position:absolute; width:min(60vmin, 520px); opacity:0; z-index:3; filter:drop-shadow(0 0 30px var(--rz-ribbon-b)); animation:rzEvoNew 1.6s cubic-bezier(.2,1.3,.3,1) 1.2s forwards; }
+@keyframes rzEvoNew{ 0%{ opacity:0; transform:scale(.6); filter:brightness(4) } 40%{ opacity:1; transform:scale(1.08); filter:brightness(1.6) drop-shadow(0 0 40px #fff) } 100%{ opacity:1; transform:scale(1); filter:brightness(1) drop-shadow(0 0 30px var(--rz-ribbon-b)) } }
+.rz-evo-title{ position:absolute; bottom:9vh; left:0; right:0; text-align:center; z-index:6; opacity:0; animation:rzEvoTitle .8s cubic-bezier(.2,1.4,.3,1) 1.7s forwards; }
+@keyframes rzEvoTitle{ from{ opacity:0; transform:translateY(30px) scale(.8) } to{ opacity:1; transform:none } }
+.rz-evo-title small{ display:block; font:700 16px/1 'Chakra Petch',sans-serif; letter-spacing:.6em; color:#fff; text-shadow:0 0 14px #b06ad8; margin-bottom:10px; }
+.rz-evo-title b{ display:block; font:700 clamp(32px,6vw,72px)/1 'Chakra Petch',sans-serif; letter-spacing:.12em;
+  background:linear-gradient(90deg, #ff4a6a, #ffb84a, #fff04a, #4aff8a, #4ad8ff, #8a4aff); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 16px rgba(255,255,255,.5)) drop-shadow(0 4px 0 rgba(0,0,0,.4)); }
+
+/* ================= METEOR CRISIS ================= */
+.rz-meteor{ position:fixed; inset:0; z-index:2147483100; overflow:hidden; cursor:pointer; }
+.rz-meteor.is-out{ animation:rzFadeOut .6s forwards; }
+.rz-mt-sky{ position:absolute; inset:0; background:radial-gradient(circle at 70% 20%, rgba(255,80,20,.75), rgba(60,0,0,.94) 55%, rgba(0,0,0,.98)); animation:rzFade .6s, rzMtPulse 1s ease-in-out infinite alternate; }
+@keyframes rzMtPulse{ to{ filter:brightness(1.25) } }
+.rz-mt-warn{ position:absolute; top:12vh; left:0; right:0; text-align:center; color:#fff; animation:rzMtBlink .5s steps(2) 6; }
+.rz-mt-warn b{ display:block; font:700 clamp(28px,5vw,58px)/1 'Chakra Petch',sans-serif; letter-spacing:.3em; color:#ff3a2a; text-shadow:0 0 22px #ff3a2a; }
+.rz-mt-warn span{ display:block; margin-top:10px; font:700 18px/1.3 'Bai Jamjuree',sans-serif; }
+.rz-meteor.is-rise .rz-mt-warn{ animation:none; opacity:0; transition:opacity .4s; }
+@keyframes rzMtBlink{ 50%{ opacity:.2 } }
+/* อุกกาบาต: ลูกไฟหัวแหลมพร้อมหางไฟ เคลื่อนจากขวาบนเข้ามาใหญ่ขึ้น */
+.rz-mt-rock{ position:absolute; left:62%; top:24%; width:120px; height:120px; margin:-60px 0 0 -60px; animation:rzMtFall 3.6s cubic-bezier(.4,0,.7,1) forwards; }
+.rz-mt-rock::before{ /* หางไฟ */
+  content:""; position:absolute; left:50%; top:50%; width:520px; height:90px; margin-top:-45px; transform-origin:0 50%; transform:rotate(-35deg);
+  background:linear-gradient(90deg, rgba(255,240,180,.9), rgba(255,120,30,.75) 25%, rgba(255,40,0,.35) 60%, transparent);
+  border-radius:50%; filter:blur(6px);
+}
+.rz-mt-rock i{ position:absolute; inset:0; border-radius:46% 54% 50% 50%;
+  background:radial-gradient(circle at 35% 35%, #ffe8a0, #ff7a2a 30%, #8a2a10 60%, #2a0a04);
+  box-shadow:0 0 40px #ff7a2a, 0 0 90px #ff3a00, inset -12px -12px 20px rgba(0,0,0,.6); animation:rzMtSpin 1.2s linear infinite; }
+@keyframes rzMtSpin{ to{ rotate:360deg } }
+@keyframes rzMtFall{ from{ transform:translate(30vw,-40vh) scale(.3) } to{ transform:translate(0,0) scale(1.6) } }
+.rz-meteor.is-boom .rz-mt-rock{ animation:none; transform:scale(1.6); opacity:0; transition:opacity .15s; }
+/* RAYQUAZA บินขึ้นจากด้านล่าง */
+.rz-mt-mon{ position:absolute; left:18%; bottom:-60vh; width:min(48vw, 520px); filter:drop-shadow(0 0 26px var(--rz-ribbon-b)); transform:rotate(-28deg); transition:bottom 1.1s cubic-bezier(.2,1.1,.3,1); z-index:2; }
+.rz-mt-mon.is-flip{ scale:-1 1; }
+.rz-meteor.is-rise .rz-mt-mon{ bottom:6vh; }
+/* ลำแสง Dragon Ascent */
+.rz-mt-beam{ position:absolute; left:34%; top:58%; width:48vw; height:40px; transform-origin:0 50%; transform:rotate(-38deg) scaleX(0); opacity:0; z-index:3;
+  background:linear-gradient(90deg, transparent, var(--rz-ribbon-a) 10%, #fff 50%, var(--rz-ribbon-b) 90%, transparent);
+  border-radius:30px; box-shadow:0 0 40px var(--rz-ribbon-a), 0 0 90px var(--rz-ribbon-b); }
+.rz-meteor.is-beam .rz-mt-beam{ animation:rzMtBeam 1.2s ease-out forwards; }
+@keyframes rzMtBeam{ 0%{ transform:rotate(-38deg) scaleX(0); opacity:1 } 40%{ transform:rotate(-38deg) scaleX(1); opacity:1 } 100%{ transform:rotate(-38deg) scaleX(1) scaleY(.1); opacity:0 } }
+.rz-mt-boom{ position:absolute; left:62%; top:24%; width:900px; height:900px; margin:-450px 0 0 -450px; border-radius:50%; opacity:0; z-index:4; pointer-events:none;
+  background:radial-gradient(circle, #fff 0, #fff3c0 12%, #ff9a3a 28%, rgba(255,60,0,.5) 45%, transparent 68%); }
+.rz-meteor.is-boom .rz-mt-boom{ animation:rzMtBoom 1.3s ease-out forwards; }
+@keyframes rzMtBoom{ 0%{ opacity:1; transform:scale(.1) } 25%{ opacity:1 } 100%{ opacity:0; transform:scale(1.8) } }
+.rz-mt-title{ position:absolute; left:0; right:0; top:14vh; text-align:center; z-index:5; opacity:0; color:#fff; }
+.rz-meteor.is-win .rz-mt-title{ animation:rzEvoTitle .8s cubic-bezier(.2,1.4,.3,1) forwards; }
+.rz-mt-title small{ display:block; font:700 15px/1 'Chakra Petch',sans-serif; letter-spacing:.5em; color:var(--rz-ribbon-a); margin-bottom:10px; }
+.rz-mt-title b{ display:block; font:700 clamp(34px,6vw,70px)/1.1 'Chakra Petch','Bai Jamjuree',sans-serif; text-shadow:0 0 24px var(--rz-ribbon-b), 0 4px 0 rgba(0,0,0,.4); }
+.rz-mt-title span{ display:block; margin-top:10px; font:700 16px/1.3 'Bai Jamjuree',sans-serif; opacity:.9; }
+.rz-meteor.is-win .rz-mt-sky{ background:radial-gradient(circle at 60% 30%, rgba(255,210,120,.35), rgba(10,20,40,.85) 60%, rgba(0,0,0,.92)); transition:background 1s; animation:none; }
+.rz-mt-skip{ position:absolute; right:20px; bottom:16px; font-size:12px; color:rgba(255,255,255,.6); z-index:6; }
+
+/* ================= COMBO / OVERDRIVE ================= */
+.rz-combo{
+  position:fixed; right:18px; top:78px; z-index:2147482985; display:none; min-width:150px; padding:8px 14px 10px; text-align:right; pointer-events:none;
+  background:linear-gradient(160deg, rgba(0,0,0,.72), rgba(0,0,0,.5)); border:1px solid var(--rz-ribbon-a);
+  clip-path:polygon(12px 0,100% 0,100% 100%,0 100%,0 12px); color:#fff;
+}
+.rz-combo.is-on{ display:block; }
+.rz-combo.is-pop{ animation:rzComboPop .35s cubic-bezier(.2,1.6,.3,1); }
+@keyframes rzComboPop{ 40%{ transform:scale(1.18) rotate(-2deg) } }
+.rz-combo small{ display:block; font:700 10px/1 'Chakra Petch',sans-serif; letter-spacing:.4em; color:var(--rz-ribbon-a); }
+.rz-combo b{ display:block; font:700 38px/1 'Chakra Petch',sans-serif; font-style:italic; text-shadow:0 0 14px var(--rz-ribbon-b); }
+.rz-combo i{ display:block; height:4px; margin-top:6px; background:rgba(255,255,255,.15); }
+.rz-combo em{ display:block; height:100%; width:100%; background:linear-gradient(90deg, var(--rz-trim), var(--rz-ribbon-a)); }
+.rz-combo strong{ display:block; margin-top:4px; font:800 13px/1 'Chakra Petch',sans-serif; letter-spacing:.14em; color:var(--rz-ribbon-a); }
+.rz-combo.is-hot{ border-color:#ff5a2a; box-shadow:0 0 22px rgba(255,90,40,.6); }
+.rz-combo.is-hot strong{ color:#ff7a3a; animation:rzMtBlink .4s steps(2) infinite; }
+.rz-combo.is-hyper{ border-color:#fff; box-shadow:0 0 30px rgba(255,255,255,.7), 0 0 50px #b06ad8; }
+.rz-combo.is-hyper b{ background:linear-gradient(90deg, #ff4a6a, #ffb84a, #fff04a, #4aff8a, #4ad8ff, #8a4aff); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+/* ขอบจอลุกเป็นไฟ */
+html.rz-overdrive body::before{
+  content:""; position:fixed; inset:0; z-index:2147482984; pointer-events:none;
+  box-shadow:inset 0 0 60px rgba(255,90,20,.65), inset 0 0 140px rgba(255,40,0,.35);
+  animation:rzOverdrive 1.2s ease-in-out infinite alternate;
+}
+html.rz-hyper body::before{ box-shadow:inset 0 0 70px rgba(255,255,255,.55), inset 0 0 160px rgba(176,106,216,.5); }
+@keyframes rzOverdrive{ to{ opacity:.55 } }
+
+/* ================= RAYQUAZA โฉบตอนเปลี่ยนหน้า ================= */
+.rz-swoop{ position:fixed; inset:0; z-index:2147482983; pointer-events:none; overflow:hidden; }
+.rz-sw-band{ position:absolute; top:-20%; bottom:-20%; width:46vw; left:-60vw; transform:skewX(-18deg);
+  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--rz-ribbon-a) 35%, transparent), color-mix(in srgb, var(--rz-ribbon-b) 55%, transparent), transparent);
+  filter:blur(2px); animation:rzSwBand .62s cubic-bezier(.6,0,.3,1) forwards; }
+.rz-sw-band.b2{ width:18vw; animation-delay:.06s; background:linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent); }
+.rz-swoop img{ position:absolute; top:28%; left:-40vw; width:min(36vw, 420px); filter:drop-shadow(0 0 18px var(--rz-ribbon-b)); animation:rzSwMon .62s cubic-bezier(.5,0,.4,1) forwards; }
+.rz-swoop img.is-flip{ scale:-1 1; }
+.rz-swoop.to-l .rz-sw-band{ animation-name:rzSwBandL; left:auto; right:-60vw; transform:skewX(18deg); }
+.rz-swoop.to-l img{ left:auto; right:-40vw; animation-name:rzSwMonL; }
+@keyframes rzSwBand{ to{ transform:skewX(-18deg) translateX(220vw); } }
+@keyframes rzSwBandL{ to{ transform:skewX(18deg) translateX(-220vw); } }
+@keyframes rzSwMon{ 0%{ transform:translate(0,40px) rotate(8deg) } 100%{ transform:translate(180vw,-60px) rotate(-6deg) } }
+@keyframes rzSwMonL{ 0%{ transform:translate(0,40px) rotate(-8deg) } 100%{ transform:translate(-180vw,-60px) rotate(6deg) } }
+
+/* ================= การ์ดโฮโลแกรม (แสงรุ้งฟอยล์ตามเมาส์) ================= */
+.rz-tc, .rz-dex, .rz-lvup-card, .rz-win-card{ position:relative; }
+.rz-tc::after, .rz-dex::after, .rz-lvup-card::after, .rz-win-card::after{
+  content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:5; mix-blend-mode:color-dodge; opacity:.55;
+  background:
+    radial-gradient(circle at var(--hx,50%) var(--hy,50%), rgba(255,255,255,.45), transparent 35%),
+    linear-gradient(115deg, transparent 20%, rgba(255,0,170,.22) 35%, rgba(0,255,255,.22) 45%, rgba(255,255,0,.22) 55%, rgba(0,255,120,.2) 65%, transparent 80%);
+  background-size:100% 100%, 250% 250%;
+  background-position:center, var(--hx,50%) var(--hy,50%);
+  transition:background-position .1s;
+}
+.rz-badge.is-on i{ background-size:200% 200%!important; }
+
+@media (prefers-reduced-motion:reduce){ .rz-epic-evo, .rz-meteor, .rz-swoop, .rz-combo{ display:none!important; } html.rz-overdrive body::before{ display:none; } }

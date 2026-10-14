@@ -1,0 +1,137 @@
+/* RAYQUAZA FX 2 — คู่กับ js/rz-fx2.js (มังกรบินผ่าน · ตัวเลข HUD · ชาร์จพลัง · DRAGON ASCENT)
+   สีทั้งหมดมาจากตัวแปร --rz-* ใน rayquaza.css · ทำงานเมื่อ html มีคลาส rz-fx-on */
+
+/* มังกร: อยู่บนสุดแต่กดทะลุได้ */
+#rzDragon{ position:fixed; inset:0; z-index:2147483001; pointer-events:none; }
+
+@media (prefers-reduced-motion:no-preference){
+
+  /* ---------- กรอบมุมเล็งแบบ HUD บนการ์ดสถิติ ---------- */
+  html.rz-fx-on body .beta-stat,
+  html.rz-fx-on body .stat,
+  html.rz-fx-on body .quick-status-item{ position:relative; }
+  html.rz-fx-on body .beta-stat::before,
+  html.rz-fx-on body .stat::before,
+  html.rz-fx-on body .quick-status-item::before{
+    content:""; position:absolute; inset:4px; pointer-events:none; opacity:.55;
+    --c:var(--rz-ribbon-a);
+    background:
+      linear-gradient(var(--c),var(--c)) top left/10px 2px,
+      linear-gradient(var(--c),var(--c)) top left/2px 10px,
+      linear-gradient(var(--c),var(--c)) top right/10px 2px,
+      linear-gradient(var(--c),var(--c)) top right/2px 10px,
+      linear-gradient(var(--c),var(--c)) bottom left/10px 2px,
+      linear-gradient(var(--c),var(--c)) bottom left/2px 10px,
+      linear-gradient(var(--c),var(--c)) bottom right/10px 2px,
+      linear-gradient(var(--c),var(--c)) bottom right/2px 10px;
+    background-repeat:no-repeat;
+    transition:inset .25s cubic-bezier(.2,.8,.2,1), opacity .25s;
+  }
+  html.rz-fx-on body .beta-stat:hover::before,
+  html.rz-fx-on body .stat:hover::before,
+  html.rz-fx-on body .quick-status-item:hover::before{ inset:1px; opacity:1; }
+
+  /* เส้นสแกนวิ่งผ่านการ์ดสถิติ */
+  html.rz-fx-on body .beta-stat::after{
+    content:""; position:absolute; left:0; right:0; top:0; height:40%; pointer-events:none;
+    background:linear-gradient(180deg, transparent, color-mix(in srgb, var(--rz-ribbon-a) 10%, transparent), transparent);
+    animation:rzScan 5.5s linear infinite;
+  }
+  html.rz-fx-on body .beta-stat:nth-child(2)::after{ animation-delay:-1.4s; }
+  html.rz-fx-on body .beta-stat:nth-child(3)::after{ animation-delay:-2.8s; }
+  html.rz-fx-on body .beta-stat:nth-child(4)::after{ animation-delay:-4.1s; }
+  @keyframes rzScan{ from{ transform:translateY(-100%) } to{ transform:translateY(260%) } }
+  html.rz-fx-on body .beta-stat{ overflow:hidden; }
+
+  /* ตัวเลขดิจิทัล: ตัวกว้างเท่ากัน ไม่สั่น + เรืองตอนเปลี่ยนค่า */
+  html.rz-fx-on body .sv,
+  html.rz-fx-on body .quick-status-item b{ font-variant-numeric:tabular-nums; }
+  html.rz-fx-on body .rz-hud-hit{
+    animation:rzHudHit .75s ease-out;
+  }
+  @keyframes rzHudHit{
+    0%  { text-shadow:-2px 0 var(--rz-trim), 2px 0 var(--rz-ribbon-a), 0 0 14px var(--rz-ribbon-b); transform:scale(1.12); }
+    15% { text-shadow:2px 0 var(--rz-trim), -2px 0 var(--rz-ribbon-a), 0 0 18px var(--rz-ribbon-b); }
+    30% { text-shadow:-1px 0 var(--rz-trim), 1px 0 var(--rz-ribbon-a), 0 0 12px var(--rz-ribbon-b); transform:scale(1); }
+    100%{ text-shadow:0 0 0 transparent; }
+  }
+  html.rz-fx-on body .sv.rz-hud-hit{ display:block; transform-origin:left center; }
+
+  /* ---------- แถบ progress เดิม → ลำพลังมังกร ---------- */
+  html.rz-fx-on body #progress .bar,
+  html.rz-fx-on body .sun-imp-progress i{
+    position:relative;
+    background:
+      repeating-linear-gradient(115deg, transparent 0 8px, rgba(255,255,255,.22) 8px 14px),
+      linear-gradient(90deg, var(--rz-trim), var(--rz-ribbon-b), var(--rz-ribbon-a))!important;
+    background-size:28px 100%, 100% 100%!important;
+    animation:rzStripe .6s linear infinite;
+    box-shadow:0 0 10px color-mix(in srgb, var(--rz-ribbon-a) 70%, transparent);
+  }
+  @keyframes rzStripe{ to{ background-position:28px 0, 0 0 } }
+
+  /* ---------- แผงชาร์จพลัง (ลอยใต้แถบนำทาง) ---------- */
+  .rz-charge{
+    position:fixed; left:50%; top:76px; z-index:2147482990; width:min(420px, calc(100vw - 32px));
+    padding:10px 16px 12px; pointer-events:none;
+    background:linear-gradient(165deg, color-mix(in srgb, var(--surface-2) 94%, transparent), color-mix(in srgb, var(--surface) 94%, transparent));
+    border:1px solid var(--rz-trim);
+    box-shadow:0 0 0 1px rgba(0,0,0,.25), 0 14px 40px rgba(0,0,0,.35), 0 0 24px color-mix(in srgb, var(--rz-ribbon-b) 30%, transparent);
+    clip-path:polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%);
+    transform:translate(-50%, -16px) scaleX(.6); opacity:0;
+    transition:transform .3s cubic-bezier(.2,.9,.2,1), opacity .25s;
+    display:none;
+  }
+  html.rz-fx-on .rz-charge.is-on{ display:block; animation:rzChargeIn .3s cubic-bezier(.2,.9,.2,1) forwards; }
+  html.rz-fx-on .rz-charge.is-out{ animation:rzChargeOut .4s ease-in forwards; }
+  @keyframes rzChargeIn{ from{ transform:translate(-50%,-16px) scaleX(.6); opacity:0 } to{ transform:translate(-50%,0) scaleX(1); opacity:1 } }
+  @keyframes rzChargeOut{ from{ transform:translate(-50%,0); opacity:1 } to{ transform:translate(-50%,-12px) scaleY(.4); opacity:0 } }
+
+  .rz-charge-top{
+    display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;
+    font:700 12px/1 'Chakra Petch',sans-serif; letter-spacing:.22em; color:var(--rz-ribbon-a);
+    text-shadow:0 0 10px color-mix(in srgb, var(--rz-ribbon-b) 70%, transparent);
+  }
+  .rz-charge-pct{ font-variant-numeric:tabular-nums; letter-spacing:.08em; color:var(--foreground); }
+  .rz-charge-track{
+    position:relative; height:10px; overflow:hidden;
+    background:repeating-linear-gradient(90deg, color-mix(in srgb, var(--foreground) 10%, transparent) 0 2px, transparent 2px 12px), rgba(0,0,0,.35);
+    border:1px solid color-mix(in srgb, var(--rz-trim) 70%, transparent);
+    clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);
+  }
+  .rz-charge-fill{
+    position:absolute; left:0; top:0; bottom:0; width:0;
+    background:
+      repeating-linear-gradient(115deg, transparent 0 8px, rgba(255,255,255,.28) 8px 14px),
+      linear-gradient(90deg, var(--rz-trim), var(--rz-ribbon-b), var(--rz-ribbon-a));
+    background-size:28px 100%, 100% 100%;
+    animation:rzStripe .5s linear infinite;
+    transition:width .35s ease-out;
+    box-shadow:0 0 12px var(--rz-ribbon-a);
+  }
+  /* หัวพลังเป็นประกายที่ปลายหลอด */
+  .rz-charge-fill::after{
+    content:""; position:absolute; right:-3px; top:-4px; bottom:-4px; width:6px;
+    background:#fff; border-radius:3px;
+    box-shadow:0 0 10px #fff, 0 0 18px var(--rz-ribbon-a), 0 0 28px var(--rz-ribbon-b);
+    animation:rzSparkTip .18s steps(2) infinite;
+  }
+  @keyframes rzSparkTip{ 50%{ opacity:.55; transform:scaleY(1.4) } }
+  .rz-charge.is-done{ border-color:var(--rz-ribbon-a); }
+  .rz-charge.is-done .rz-charge-fill{ animation:rzFull .6s ease-out; }
+  .rz-charge.is-done .rz-charge-fill::after{ display:none; }
+  @keyframes rzFull{ 0%{ filter:brightness(1) } 30%{ filter:brightness(2.2) } 100%{ filter:brightness(1) } }
+
+  /* ---------- DRAGON ASCENT: จอสั่น ---------- */
+  body.rz-quake .shell{ animation:rzQuake .8s cubic-bezier(.36,.07,.19,.97); }
+  @keyframes rzQuake{
+    10%,90%{ transform:translate3d(-1px,1px,0) }
+    20%,80%{ transform:translate3d(3px,-2px,0) }
+    30%,50%,70%{ transform:translate3d(-5px,2px,0) }
+    40%,60%{ transform:translate3d(5px,-1px,0) }
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  #rzDragon, .rz-charge{ display:none!important; }
+}

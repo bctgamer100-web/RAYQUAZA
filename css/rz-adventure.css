@@ -1,0 +1,137 @@
+/* RAYQUAZA ADVENTURE — คู่กับ js/rz-adventure.js */
+
+/* ================= 1) Wild SKU / จับด้วย Master Ball ================= */
+.rz-catch{ position:fixed; inset:0; z-index:2147482999; cursor:pointer; overflow:hidden; background:linear-gradient(180deg, #9fdcf0 0%, #d8f4e8 52%, #6cbf5c 53%, #3f8a3a 100%); animation:rzFade .3s; }
+.rz-catch.is-out{ animation:rzFadeOut .4s forwards; }
+.rz-ct-grass{ position:absolute; left:55%; top:44%; width:300px; height:70px; border-radius:50%; background:radial-gradient(ellipse, rgba(40,120,40,.75), transparent 70%); }
+.rz-ct-mon{ position:absolute; left:55%; top:22%; width:180px; transform:translateX(0); text-align:center; animation:rzCtIn .6s cubic-bezier(.2,1.3,.3,1); }
+.rz-ct-mon canvas{ width:170px; height:170px; image-rendering:pixelated; animation:rzBuddyBob 1.4s ease-in-out infinite; filter:drop-shadow(0 8px 6px rgba(0,0,0,.3)); }
+.rz-ct-many{ position:absolute; right:-10px; top:0; padding:2px 8px; border-radius:10px; background:#ff4a4a; color:#fff; font:700 18px/1.3 'Chakra Petch',sans-serif; }
+@keyframes rzCtIn{ from{ transform:translateX(60vw); } }
+.rz-catch.is-in .rz-ct-mon{ animation:rzCtSuck .45s ease-in forwards; }
+@keyframes rzCtSuck{ to{ transform:scale(.05) translateY(400px); opacity:0; filter:brightness(5); } }
+.rz-ct-ball{ position:absolute; left:8%; top:78%; width:60px; height:60px; opacity:0; }
+.rz-ct-ball i{ position:absolute; inset:0; background:url("../img/masterball-256.png?v=2") center/contain no-repeat; }
+.rz-catch.is-throw .rz-ct-ball{ opacity:1; animation:rzCtThrow .8s cubic-bezier(.3,.6,.4,1) forwards; }
+@keyframes rzCtThrow{ 0%{ left:8%; top:78%; transform:rotate(0) } 60%{ top:12%; } 100%{ left:calc(55% + 60px); top:38%; transform:rotate(720deg) } }
+.rz-catch.is-in .rz-ct-ball{ left:calc(55% + 60px); top:42%; animation:none; opacity:1; }
+.rz-catch.is-in .rz-ct-ball i{ transform-origin:50% 90%; animation:rzBallShake .4s ease-in-out .3s 3; }
+.rz-catch.is-got .rz-ct-ball i{ animation:none; filter:brightness(.75); }
+.rz-catch.is-got .rz-ct-ball::after{ content:"✦ ✦ ✦"; position:absolute; left:-20px; right:-20px; top:-26px; text-align:center; color:#ffd84a; font-size:18px; letter-spacing:6px; text-shadow:0 0 8px #fff; animation:rzLvPop .5s ease-out; }
+.rz-ct-dlg{
+  position:absolute; left:16px; right:16px; bottom:16px; min-height:80px; padding:18px 24px;
+  background:var(--rz-dlg-bg); color:var(--rz-dlg-fg); border:4px solid var(--rz-dlg-line); border-radius:12px;
+  box-shadow:inset 0 0 0 4px var(--rz-dlg-bg), inset 0 0 0 7px var(--rz-trim); font:700 clamp(17px, 2vw, 22px)/1.4 'Bai Jamjuree',sans-serif;
+}
+
+/* ================= 2) แผนที่คลังสินค้า ================= */
+.rz-map{ width:min(860px, 100%); }
+.rz-map-land{
+  display:grid; grid-template-columns:repeat(var(--cols), 1fr); gap:28px 22px; padding:26px; border-radius:10px; border:4px solid #3a3330;
+  background:
+    linear-gradient(90deg, transparent calc(50% - 9px), #e8d8a0 calc(50% - 9px) calc(50% + 9px), transparent calc(50% + 9px)) 0 0/calc(100% / var(--cols)) 100%,
+    linear-gradient(0deg, transparent calc(50% - 9px), #e8d8a0 calc(50% - 9px) calc(50% + 9px), transparent calc(50% + 9px)) 0 0/100% 120px,
+    #7cc870;
+  box-shadow:inset 0 0 0 3px #a8e090;
+}
+html body .rz-map .rz-map-zone{
+  position:relative; display:flex!important; flex-direction:column; align-items:center; gap:3px; padding:26px 8px 10px!important; min-height:100px;
+  background:hsl(var(--hue) 55% 88%)!important; border:3px solid #3a3330!important; border-radius:6px!important; box-shadow:0 5px 0 rgba(0,0,0,.25)!important;
+}
+.rz-map-roof{ position:absolute; left:-6px; right:-6px; top:-14px; height:28px; background:hsl(var(--hue) 60% 45%); border:3px solid #3a3330; clip-path:polygon(8% 100%, 50% 0, 92% 100%); }
+.rz-map-zone b{ font:700 22px/1 'Chakra Petch',sans-serif; color:#2a2420; }
+.rz-map-zone small{ font-size:11.5px; color:#5a4a40; }
+.rz-map-zone em{ position:absolute; top:-30px; right:6px; font-style:normal; font-size:26px; animation:rzPinBob .7s ease-in-out infinite; filter:drop-shadow(0 3px 2px rgba(0,0,0,.4)); }
+@keyframes rzPinBob{ 50%{ transform:translateY(-8px); } }
+html body .rz-map .rz-map-zone.is-pin{ box-shadow:0 0 0 4px #ff4a4a, 0 0 24px #ff4a4a!important; animation:rzMtBlink 1s steps(2) 4; }
+html body .rz-map .rz-map-zone.is-on{ outline:4px solid var(--rz-ribbon-a); outline-offset:2px; }
+.rz-map-list{ margin-top:12px; }
+.rz-map-list p, .rz-map-empty{ color:#6a5a50; font-size:13.5px; }
+.rz-map-skus{ display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:6px; max-height:34vh; overflow:auto; }
+html body .rz-map .rz-map-skus button{ display:flex!important; flex-direction:column; align-items:flex-start; gap:2px; padding:7px 10px!important; text-align:left; }
+.rz-map-skus button b{ font:700 13px/1.2 'Chakra Petch',sans-serif; word-break:break-all; }
+.rz-map-skus button small{ font-size:11px; color:#7a6a60; }
+html body .rz-map .rz-map-skus button.is-pin{ box-shadow:0 0 0 3px #ff4a4a!important; }
+html body .rz-hero .rz-map-btn, html body .rz-dex .rz-dex-map{
+  all:unset; cursor:pointer; box-sizing:border-box; padding:7px 14px!important; border-radius:4px!important;
+  background:rgba(0,0,0,.3)!important; color:#fff3e0!important; border:1px solid color-mix(in srgb, var(--rz-ribbon-a) 50%, transparent)!important;
+  font:700 13px/1.2 'Bai Jamjuree',sans-serif!important;
+}
+html body .rz-dex .rz-dex-map{ display:inline-block; margin-top:10px; background:#2a3a32!important; color:#c8f8c8!important; border-color:#4ade6a!important; }
+
+/* ================= 3–7, 9) ส่วนในบัตรเทรนเนอร์ ================= */
+.rz-tc-title{ margin:6px 0 0; font:700 13px/1.2 'Chakra Petch','Bai Jamjuree',sans-serif; color:var(--rz-trim); letter-spacing:.04em; }
+.rz-rv{ display:grid; grid-template-columns:60px 1fr 70px; align-items:center; gap:10px; padding:3px 0; font-size:13px; font-weight:700; }
+.rz-rv i{ height:10px; border-radius:6px; background:#d8cdb6; overflow:hidden; border:1px solid rgba(58,51,48,.25); }
+.rz-rv em{ display:block; height:100%; background:linear-gradient(90deg, #58c8f8, #2878c8); }
+.rz-rv.is-rival em{ background:linear-gradient(90deg, #ff8a7a, #c0281a); }
+.rz-rv b{ text-align:right; font-variant-numeric:tabular-nums; }
+.rz-tc-rival p{ margin:4px 0 0; font-size:12.5px; color:#6a5a50; }
+.rz-gym-case{ display:grid; grid-template-columns:repeat(8, 1fr); gap:6px; padding:10px; border-radius:10px; background:linear-gradient(160deg, #3a2a40, #241a28); border:3px solid #3a3330; }
+.rz-gym{ display:flex; flex-direction:column; align-items:center; gap:3px; font-size:10px; font-weight:700; color:#a89aa8; text-align:center; }
+.rz-gym i{ display:grid; place-items:center; width:40px; height:40px; border-radius:50%; font-style:normal; font-size:20px; background:#1a1218; border:2px dashed #5a4a5a; }
+.rz-gym.is-on{ color:#ffe7a1; }
+.rz-gym.is-on i{ border:2px solid #ffd34d; background:radial-gradient(circle at 35% 30%, #fff6c0, #f3c45a 40%, #b07a10); box-shadow:0 0 12px rgba(255,211,77,.6); }
+@media (max-width:640px){ .rz-gym-case{ grid-template-columns:repeat(4, 1fr); } }
+.rz-egg-row{ display:grid; grid-template-columns:40px 1fr 90px; align-items:center; gap:10px; font-size:13px; font-weight:700; }
+.rz-egg-ico{ font-size:30px; display:inline-block; animation:rzBuddyBob 2.4s ease-in-out infinite; }
+.rz-egg-ico.crack1{ animation:rzBallShake .5s ease-in-out infinite; }
+.rz-egg-ico.crack2{ animation:rzBallShake .25s ease-in-out infinite; filter:drop-shadow(0 0 8px #ffd34d); }
+.rz-egg-row i{ height:10px; border-radius:6px; background:#d8cdb6; overflow:hidden; border:1px solid rgba(58,51,48,.25); }
+.rz-egg-row em{ display:block; height:100%; background:linear-gradient(90deg, #f6d78a, #e8702a); }
+.rz-egg-row b{ text-align:right; }
+
+/* ================= 6–7) Mystery Gift / ไข่ฟัก ================= */
+.rz-gift{ position:fixed; inset:0; z-index:2147482998; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; cursor:pointer; background:rgba(0,0,0,.6); animation:rzFade .3s; }
+.rz-gift.is-out{ animation:rzFadeOut .4s forwards; }
+.rz-gift-box{ position:relative; width:150px; height:140px; animation:rzBallShake .5s ease-in-out infinite; transform-origin:50% 100%; }
+.rz-gift-box .box{ position:absolute; left:10px; right:10px; bottom:0; height:96px; background:linear-gradient(160deg, #b06ad8, #6a2c91); border:4px solid #2a1040; border-radius:6px; }
+.rz-gift-box .lid{ position:absolute; left:0; right:0; top:16px; height:30px; background:linear-gradient(160deg, #c88ae8, #7a3ca1); border:4px solid #2a1040; border-radius:6px; transition:transform .5s cubic-bezier(.3,1.4,.4,1); z-index:2; }
+.rz-gift-box .ribbon{ position:absolute; left:calc(50% - 10px); width:20px; top:16px; bottom:0; background:#ffd34d; border-left:3px solid #2a1040; border-right:3px solid #2a1040; z-index:3; transition:transform .5s cubic-bezier(.3,1.4,.4,1); }
+.rz-gift.is-open .rz-gift-box{ animation:none; }
+.rz-gift.is-open .rz-gift-box .lid, .rz-gift.is-open .rz-gift-box .ribbon{ transform:translateY(-90px) rotate(-25deg); }
+.rz-gift-txt{ max-width:min(520px, 90vw); text-align:center; color:#fff; padding:16px 24px; background:var(--rz-dlg-bg); color:var(--rz-dlg-fg); border:3px solid var(--rz-dlg-line); border-radius:12px; box-shadow:inset 0 0 0 3px var(--rz-dlg-bg), inset 0 0 0 6px #b06ad8; }
+.rz-gift-txt small{ display:block; font:700 12px/1 'Chakra Petch',sans-serif; letter-spacing:.4em; color:#8a4aba; margin-bottom:6px; }
+.rz-gift-txt b{ display:block; font:700 20px/1.35 'Bai Jamjuree',sans-serif; }
+.rz-gift-txt span{ display:block; margin-top:6px; font-size:13px; color:#7a6a60; }
+.rz-egg{ font-size:110px; line-height:1; animation:rzBallShake .35s ease-in-out infinite; transform-origin:50% 90%; }
+.rz-egg i::before{ content:"🥚"; }
+.rz-hatch-baby{ position:absolute; opacity:0; }
+.rz-hatch-baby canvas{ width:160px; height:160px; image-rendering:pixelated; }
+.rz-hatch.is-hatched .rz-egg{ animation:rzCtSuck .3s ease-in forwards; }
+.rz-hatch.is-hatched .rz-hatch-baby{ position:static; opacity:1; animation:rzEvoNew 1s cubic-bezier(.2,1.3,.3,1) forwards; }
+/* ลูกมังกรเดินข้างคู่หู */
+.rz-baby{ position:absolute; left:-30px; bottom:-2px; width:44px; height:44px; pointer-events:none; animation:rzBabyHop 1.6s ease-in-out infinite; }
+.rz-buddy.acc-left .rz-baby{ left:auto; right:-30px; }
+.rz-baby canvas{ width:44px; height:44px; image-rendering:pixelated; filter:drop-shadow(0 3px 2px rgba(0,0,0,.35)); }
+@keyframes rzBabyHop{ 0%,100%{ transform:translateY(0) } 30%{ transform:translateY(-12px) } 50%{ transform:translateY(0) } }
+
+/* ================= 8) ศูนย์โปเกมอน ================= */
+.rz-center{ position:fixed; inset:0; z-index:2147482997; display:grid; place-items:center; padding:16px; background:radial-gradient(circle at 50% 40%, rgba(255,200,220,.35), rgba(0,0,0,.65)); animation:rzFade .4s; }
+.rz-cn-card{ width:min(460px, 100%); text-align:center; padding:20px 24px; background:var(--rz-dlg-bg); color:var(--rz-dlg-fg); border:4px solid var(--rz-dlg-line); border-radius:16px; box-shadow:inset 0 0 0 4px var(--rz-dlg-bg), inset 0 0 0 7px #ff8ab0, 0 20px 50px rgba(0,0,0,.45); animation:rzWinIn .5s cubic-bezier(.2,1.2,.3,1); }
+.rz-cn-card img{ width:180px; margin:-80px auto 4px; display:block; filter:brightness(.85) saturate(.8) drop-shadow(0 8px 10px rgba(0,0,0,.35)); animation:rzBreath 3s ease-in-out infinite; }
+.rz-cn-card small{ display:block; font:700 12px/1 'Chakra Petch',sans-serif; letter-spacing:.4em; color:#e0507a; }
+.rz-cn-card b{ display:block; margin:6px 0; font:700 22px/1.3 'Bai Jamjuree',sans-serif; }
+.rz-cn-card p{ margin:6px 0 14px; font-size:14px; line-height:1.55; color:#5a4a40; }
+.rz-cn-btns{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+html body .rz-cn-btns button{ all:unset; cursor:pointer; padding:10px 18px!important; border-radius:8px!important; border:2px solid #3a3330!important; background:#efe4c8!important; color:#2a2420!important; font:700 14px/1.2 'Bai Jamjuree',sans-serif!important; }
+html body .rz-cn-btns button:first-child{ background:linear-gradient(135deg, #ffb0c8, #ff7aa0)!important; }
+.rz-cn-time{ font:700 54px/1 'Chakra Petch',sans-serif; color:#e0507a; margin:8px 0; font-variant-numeric:tabular-nums; }
+.rz-cn-tray{ display:flex; justify-content:center; gap:8px; margin:0 0 10px; }
+.rz-cn-tray i{ width:22px; height:22px; border-radius:50%; background:url("../img/masterball-256.png?v=2") center/contain no-repeat; animation:rzCnHeal 1.2s ease-in-out infinite; }
+.rz-cn-tray i:nth-child(2){ animation-delay:.2s } .rz-cn-tray i:nth-child(3){ animation-delay:.4s } .rz-cn-tray i:nth-child(4){ animation-delay:.6s } .rz-cn-tray i:nth-child(5){ animation-delay:.8s } .rz-cn-tray i:nth-child(6){ animation-delay:1s }
+@keyframes rzCnHeal{ 50%{ filter:brightness(1.8) drop-shadow(0 0 8px #ff8ab0); transform:translateY(-4px); } }
+
+/* ================= 9) ท่าตอนคลิก ================= */
+.rz-move{ position:fixed; z-index:2147482986; width:0; height:0; pointer-events:none; }
+.rz-move b{ position:absolute; left:-5px; top:-5px; width:10px; height:10px; border-radius:50%; transform:rotate(var(--a)) translateX(0); animation:rzMoveOut .6s cubic-bezier(.2,.8,.3,1) forwards; }
+@keyframes rzMoveOut{ to{ transform:rotate(var(--a)) translateX(var(--d)) scale(.3); opacity:0; } }
+.rz-move.is-thunder b{ width:4px; height:18px; border-radius:2px; left:-2px; top:-9px; background:#fff59a; box-shadow:0 0 10px #ffe04a, 0 0 18px #ffd000; }
+.rz-move.is-flame b{ background:radial-gradient(circle, #fff3a0, #ff8a2a 50%, #e0301e); box-shadow:0 0 12px #ff6a1a; width:14px; height:14px; left:-7px; top:-7px; }
+.rz-move.is-ice b{ background:#e8fbff; box-shadow:0 0 10px #8ae0ff, 0 0 18px #4ac8ff; clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%); width:12px; height:12px; }
+.rz-move.is-pulse b{ width:40px; height:40px; left:-20px; top:-20px; background:transparent; border:3px solid #9a6aff; box-shadow:0 0 14px #7a3aff; animation:rzMovePulse .6s ease-out forwards; }
+.rz-move.is-pulse b:nth-child(2){ animation-delay:.1s; } .rz-move.is-pulse b:nth-child(3){ animation-delay:.2s; }
+@keyframes rzMovePulse{ from{ transform:scale(.2); opacity:1 } to{ transform:scale(2.4); opacity:0 } }
+.rz-move.is-hyper b{ width:12px; height:12px; left:-6px; top:-6px; background:conic-gradient(#ff4a6a, #ffb84a, #fff04a, #4aff8a, #4ad8ff, #8a4aff, #ff4a6a); box-shadow:0 0 12px #fff; }
+
+@media (prefers-reduced-motion:reduce){ .rz-catch, .rz-move, .rz-gift .rz-gift-box{ animation:none!important; } .rz-move{ display:none; } }

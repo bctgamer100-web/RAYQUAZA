@@ -1,0 +1,162 @@
+/* RAYQUAZA EXTRA — คู่กับ js/rz-settings.js, js/rz-progress.js, js/rz-extra.js */
+
+/* ================= โหมดโฟกัส: ซ่อนของหนัก/ดึงความสนใจ ================= */
+html.rz-focus #rzSky, html.rz-focus #rzDragon, html.rz-focus #rzWeather, html.rz-focus #rzFest,
+html.rz-focus .rz-combo, html.rz-focus body::before, html.rz-focus .rz-hero-art{ display:none!important; }
+html.rz-focus .rz-panel, html.rz-focus .rz-hero{ animation:none!important; }
+
+/* ================= ศูนย์ตั้งค่า ================= */
+.rz-set{ width:min(720px, 100%); }
+.rz-set-top{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px; }
+html body .rz-set .rz-set-focus{
+  display:flex!important; flex-direction:column; align-items:flex-start; gap:4px; text-align:left!important; padding:12px 14px!important;
+  background:#efe4c8!important; border:2px solid #3a3330!important;
+}
+html body .rz-set .rz-set-focus b{ font:700 16px/1.2 'Chakra Petch','Bai Jamjuree',sans-serif; }
+html body .rz-set .rz-set-focus small{ font:500 12.5px/1.4 'Bai Jamjuree',sans-serif; color:#6a5a50; }
+html body .rz-set .rz-set-focus.is-on{ background:linear-gradient(135deg, #ffe7a1, #f3c45a)!important; box-shadow:0 0 0 3px var(--rz-trim)!important; }
+.rz-set-perf{ display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:6px; background:rgba(58,51,48,.08); border:2px solid rgba(58,51,48,.25); }
+.rz-perf-fps{ text-align:center; min-width:70px; }
+.rz-perf-fps b{ display:block; font:700 30px/1 'Chakra Petch',sans-serif; }
+.rz-perf-fps small{ font-size:11px; font-weight:700; }
+.rz-perf-fps.is-g b{ color:#2a9a40; } .rz-perf-fps.is-y b{ color:#c89a08; } .rz-perf-fps.is-r b{ color:#c0281a; }
+.rz-perf-info{ display:flex; flex-direction:column; gap:3px; font-size:12.5px; color:#4a3a30; }
+.rz-set-auto{ display:flex; align-items:center; gap:8px; margin:2px 0 6px; font-size:13px; font-weight:600; color:#4a3a30; }
+.rz-set-list{ display:grid; grid-template-columns:1fr 1fr; gap:4px 18px; }
+.rz-set-sec h4{ display:flex; align-items:center; gap:8px; margin:12px 0 4px; font:700 14px/1 'Chakra Petch','Bai Jamjuree',sans-serif; letter-spacing:.06em; color:var(--rz-trim); }
+.rz-set-sec h4 i{ font-style:normal; }
+html body .rz-set .rz-set-row{
+  display:flex!important; align-items:center; gap:10px; width:100%; margin:0 0 4px!important; padding:8px 10px!important; text-align:left!important;
+  background:transparent!important; border:0!important; border-bottom:1px solid rgba(58,51,48,.15)!important; border-radius:4px!important;
+}
+html body .rz-set .rz-set-row:hover{ background:rgba(255,211,77,.18)!important; }
+.rz-set-txt{ flex:1; display:flex; flex-direction:column; gap:2px; min-width:0; }
+.rz-set-txt b{ font:700 14px/1.25 'Bai Jamjuree',sans-serif; color:#2a2420; }
+.rz-set-txt small{ font:500 12px/1.35 'Bai Jamjuree',sans-serif; color:#7a6a60; }
+.rz-set-sw{ position:relative; width:42px; height:24px; flex:0 0 auto; border-radius:13px; background:#cfc4ae; border:2px solid #3a3330; transition:background .2s; }
+.rz-set-sw i{ position:absolute; left:2px; top:2px; width:16px; height:16px; border-radius:50%; background:#fff; border:2px solid #3a3330; transition:transform .2s; }
+.rz-set-sw.is-on{ background:var(--rz-trim); }
+.rz-set-sw.is-on i{ transform:translateX(18px); }
+.rz-set-go{ font:700 13px/1 'Bai Jamjuree',sans-serif; color:var(--rz-trim); }
+@media (max-width:640px){ .rz-set-top, .rz-set-list{ grid-template-columns:1fr; } }
+
+/* ================= ภารกิจ · ปฏิทินสถิติ · ตู้เสื้อผ้า (ในบัตรเทรนเนอร์) ================= */
+.rz-qpill{ margin-left:2px; padding:1px 6px; border-radius:8px; font:700 10px/1.4 'Chakra Petch',sans-serif; color:#1a0600; -webkit-text-fill-color:#1a0600; background:var(--rz-ribbon-a); white-space:nowrap; }
+.rz-qpill.is-done{ background:linear-gradient(90deg, #ffe7a1, #78c850); }
+.rz-tc h5{ display:flex; align-items:baseline; gap:10px; margin:14px 0 8px; font:700 15px/1.2 'Chakra Petch','Bai Jamjuree',sans-serif; color:#2a2420; }
+.rz-tc h5 small{ font:600 12px/1 'Bai Jamjuree',sans-serif; color:#7a6a60; }
+.rz-q{ display:grid; grid-template-columns:1fr 120px 64px; align-items:center; gap:10px; padding:5px 0; font-size:13.5px; }
+.rz-q i{ height:8px; border-radius:5px; background:#d8cdb6; overflow:hidden; border:1px solid rgba(58,51,48,.25); }
+.rz-q em{ display:block; height:100%; background:linear-gradient(90deg, var(--rz-ribbon-b), var(--rz-ribbon-a)); }
+.rz-q b{ text-align:right; font-variant-numeric:tabular-nums; }
+.rz-q.is-done span{ color:#2a8a40; font-weight:700; }
+.rz-q.is-done em{ background:linear-gradient(90deg, #4ac860, #9be070); }
+.rz-heat{ display:grid; grid-auto-flow:column; grid-template-rows:repeat(7, 12px); grid-auto-columns:12px; gap:3px; overflow-x:auto; padding-bottom:4px; }
+.rz-heat i, .rz-heat-key i{ display:block; width:12px; height:12px; border-radius:2px; }
+.rz-heat .l0, .rz-heat-key .l0{ background:#e2d8c2; }
+.rz-heat .l1, .rz-heat-key .l1{ background:#f6d78a; }
+.rz-heat .l2, .rz-heat-key .l2{ background:#f3b04a; }
+.rz-heat .l3, .rz-heat-key .l3{ background:#e8702a; }
+.rz-heat .l4, .rz-heat-key .l4{ background:#c0281a; }
+.rz-heat-key{ display:flex; align-items:center; gap:3px; margin-top:6px; font-size:11px; color:#7a6a60; }
+.rz-wd{ display:flex; flex-wrap:wrap; gap:8px; }
+html body .rz-tc .rz-wd button{ display:flex!important; flex-direction:column; align-items:center; gap:2px; width:76px; padding:8px 4px!important; }
+html body .rz-tc .rz-wd button i{ font-style:normal; font-size:24px; line-height:1; }
+html body .rz-tc .rz-wd button span{ font-size:11.5px; }
+html body .rz-tc .rz-wd button.is-on{ background:linear-gradient(135deg, #ffe7a1, #f3c45a)!important; box-shadow:0 0 0 3px var(--rz-trim)!important; }
+html body .rz-tc .rz-wd button:disabled{ opacity:.45; cursor:not-allowed; }
+
+/* ของแต่งคู่หู (หัวอยู่ฝั่งขวาเป็นค่าเริ่ม · acc-left = หันซ้าย) */
+.rz-buddy-acc{ position:absolute; z-index:3; pointer-events:none; font-size:26px; line-height:1; right:14px; top:8px; filter:drop-shadow(0 2px 2px rgba(0,0,0,.4)); transition:left .3s, right .3s; }
+.rz-buddy.acc-left .rz-buddy-acc{ right:auto; left:14px; }
+.rz-buddy-acc.is-scarf{ top:38px; font-size:24px; }
+.rz-buddy-acc.is-shades{ top:22px; font-size:20px; }
+.rz-buddy-acc.is-crown, .rz-buddy-acc.is-hat{ top:-4px; }
+.rz-buddy-acc.is-halo{ top:-10px; font-size:24px; animation:rzBuddyBob 2s ease-in-out infinite; }
+.rz-buddy-acc:empty{ display:none; }
+
+/* ================= บอสประจำสัปดาห์ (แบนเนอร์หน้าตรวจ) ================= */
+html body .rz-hero-hud .rz-boss{
+  all:unset; box-sizing:border-box; cursor:pointer; display:flex; flex-direction:column; gap:3px; min-width:170px; padding:9px 16px 9px 14px;
+  background:linear-gradient(160deg, rgba(90,0,20,.6), rgba(20,0,0,.45)); border:1px solid rgba(255,80,80,.55); box-shadow:inset 3px 0 0 #ff4a4a;
+  clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%); color:#ffe0e0;
+}
+.rz-boss small{ font:700 11px/1 'Bai Jamjuree',sans-serif; letter-spacing:.04em; opacity:.85; }
+.rz-boss b{ font:700 18px/1.1 'Chakra Petch',sans-serif; color:#fff; text-shadow:0 0 12px rgba(255,60,60,.7); }
+.rz-boss span{ font-size:11.5px; opacity:.85; }
+
+/* ================= สรุปประจำสัปดาห์ ================= */
+.rz-week{ width:min(560px, 100%); }
+.rz-week-img{ display:block; width:auto; max-width:100%; height:auto; max-height:calc(100vh - 210px); margin:0 auto; border-radius:8px; border:3px solid #3a3330; background:#111; }
+
+/* ================= ตำนานลึกลับมาเยือน ================= */
+.rz-visit{ position:fixed; inset:0; z-index:2147482982; pointer-events:none; overflow:hidden; }
+.rz-visit-shade{ position:absolute; inset:0; animation:rzFade 1s; }
+.rz-visit.is-land .rz-visit-shade{ background:radial-gradient(ellipse at 50% 110%, rgba(255,90,20,.45), transparent 60%); }
+.rz-visit.is-sea .rz-visit-shade{ background:radial-gradient(ellipse at 50% 110%, rgba(30,90,255,.45), transparent 60%); }
+.rz-visit-mon{ position:absolute; left:50%; bottom:-10px; width:min(70vw, 760px); transform:translate(-50%, 100%); animation:rzVisitRise 2.4s cubic-bezier(.2,.8,.3,1) forwards; }
+.rz-visit-mon svg{ width:100%; display:block; fill:rgba(8,4,6,.88); filter:drop-shadow(0 0 30px rgba(0,0,0,.6)); }
+.rz-visit .eye{ fill:#ff3a1a; filter:drop-shadow(0 0 8px #ff3a1a); animation:rzMtBlink 1.6s steps(2) infinite; }
+.rz-visit.is-sea .eye{ fill:#ffd84a; filter:drop-shadow(0 0 8px #ffd84a); }
+.rz-visit .eye-line{ fill:none; stroke:rgba(255,216,74,.7); stroke-width:4; }
+@keyframes rzVisitRise{ to{ transform:translate(-50%, 18%); } }
+.rz-visit.is-flee .rz-visit-mon{ animation:none; transform:translate(-50%, 110%); transition:transform 1.6s cubic-bezier(.6,0,.8,.4); }
+.rz-visit.is-flee .rz-visit-shade{ opacity:0; transition:opacity 1.5s; }
+body.rz-rumble .shell{ animation:rzQuake .5s linear infinite; }
+
+/* ================= เทศกาล ================= */
+#rzFest{ position:fixed; inset:0; z-index:57; pointer-events:none; }
+.rz-fest-tag{ display:inline-flex; align-items:center; gap:6px; padding:4px 10px; margin-left:4px; white-space:nowrap; font-size:16px;
+  background:rgba(0,0,0,.25); border:1px solid color-mix(in srgb, var(--rz-ribbon-a) 50%, transparent); border-radius:14px; }
+.rz-fest-tag b{ font:700 12px/1 'Bai Jamjuree',sans-serif; color:var(--rz-ribbon-a); }
+@media (max-width:1599px){ .rz-fest-tag b{ display:none; } }
+.rz-fest-garland{ position:fixed; left:0; right:0; top:0; z-index:79; height:30px; display:flex; justify-content:space-around; pointer-events:none; }
+.rz-fest-garland i{ width:14px; height:20px; margin-top:6px; border-radius:50% 50% 45% 45%; animation:rzGarland 1.6s ease-in-out infinite alternate; }
+.rz-fest-garland i:nth-child(odd){ animation-delay:.8s; }
+.rz-fest-garland.is-cny i{ width:18px; height:22px; background:radial-gradient(circle at 40% 35%, #ff6a5a, #c0101a); box-shadow:0 0 12px rgba(255,60,40,.8); border:2px solid #ffd34d; }
+.rz-fest-garland.is-xmas i:nth-child(3n){ background:#ff4a4a; box-shadow:0 0 12px #ff4a4a; }
+.rz-fest-garland.is-xmas i:nth-child(3n+1){ background:#4ade6a; box-shadow:0 0 12px #4ade6a; }
+.rz-fest-garland.is-xmas i:nth-child(3n+2){ background:#ffd84a; box-shadow:0 0 12px #ffd84a; }
+@keyframes rzGarland{ to{ opacity:.45; transform:translateY(2px); } }
+
+/* ================= รหัสลับ ================= */
+.rz-hyper{ position:fixed; inset:0; z-index:2147483050; pointer-events:none; display:grid; place-items:center; overflow:hidden; }
+.rz-hyper-beam{ position:absolute; left:-10%; right:-10%; top:50%; height:180px; margin-top:-90px;
+  background:linear-gradient(180deg, transparent, var(--rz-ribbon-b) 20%, #fff 45%, #fff 55%, var(--rz-ribbon-a) 80%, transparent);
+  box-shadow:0 0 80px var(--rz-ribbon-a), 0 0 160px var(--rz-ribbon-b); transform:scaleY(0); animation:rzHyper 1.5s cubic-bezier(.2,.9,.3,1) forwards; }
+.rz-hyper-core{ position:absolute; inset:0; background:#fff; opacity:0; animation:rzEvoFlash .9s ease-out .15s forwards; }
+.rz-hyper b{ position:relative; z-index:2; font:700 clamp(40px, 8vw, 110px)/1 'Chakra Petch',sans-serif; font-style:italic; letter-spacing:.06em; color:#fff;
+  text-shadow:0 0 30px var(--rz-ribbon-b), 0 6px 0 rgba(0,0,0,.4); animation:rzEvoTitle .6s cubic-bezier(.2,1.4,.3,1) both, rzFadeOut .4s 1.1s forwards; }
+@keyframes rzHyper{ 0%{ transform:scaleY(0) } 20%{ transform:scaleY(1.1) } 70%{ transform:scaleY(1); opacity:1 } 100%{ transform:scaleY(.05); opacity:0 } }
+/* สลับร่างสีพิเศษ (shiny): ภาพมังกรในแบนเนอร์สลับเป็นอีกสี */
+html.rz-alt-color:not([data-prod-theme="light"]) .rz-hero-art{ background-image:url("../img/rayquaza-mega.png?v=1")!important; transform:scaleX(-1); animation:none; }
+html.rz-alt-color[data-prod-theme="light"] .rz-hero-art{ background-image:url("../img/rayquaza-shiny.png?v=2")!important; transform:none; }
+/* คลัง RZ-DEX */
+.rz-pdx{ width:min(720px, 100%); }
+html body .rz-pdx .rz-pdx-q{ width:100%; margin:0 0 10px; padding:8px 12px!important; border:3px solid #4a0d0a!important; border-radius:8px!important; background:#fdf6e3!important; color:#2a2420!important; font:600 14px/1.2 'Bai Jamjuree',sans-serif!important; }
+.rz-pdx-list{ display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:8px; max-height:60vh; overflow:auto; padding:4px; background:#1e2a24; border:4px solid #4a0d0a; border-radius:8px; }
+html body .rz-pdx-list button{
+  all:unset; box-sizing:border-box; cursor:pointer; display:flex; flex-direction:column; gap:2px; padding:8px 10px!important; border-radius:6px!important;
+  background:#2a3a32!important; color:#c8f8c8!important; font:700 13px/1.25 'Chakra Petch',sans-serif!important; word-break:break-all;
+}
+html body .rz-pdx-list button:hover{ background:#3a5a48!important; }
+.rz-pdx-list small{ font-size:10.5px; opacity:.7; }
+.rz-pdx-list p{ grid-column:1/-1; color:#c8f8c8; margin:12px; }
+
+/* ================= ป้าย HP สต็อก ================= */
+#sunOutput td.rz-hp1, #sunOutput td.rz-hp0{ position:relative; font-weight:700; }
+#sunOutput td.rz-hp1{ color:#e8a800!important; }
+#sunOutput td.rz-hp0{ color:#ff5a4a!important; }
+#sunOutput td.rz-hp1::after, #sunOutput td.rz-hp0::after{
+  display:inline-block; margin-left:6px; padding:1px 5px; border-radius:3px; vertical-align:1px;
+  font:700 9.5px/1.3 'Chakra Petch',sans-serif; letter-spacing:.04em; color:#fff; -webkit-text-fill-color:#fff;
+}
+#sunOutput td.rz-hp1::after{ content:"⚠ HP ต่ำ"; background:#c89a08; }
+#sunOutput td.rz-hp0::after{ content:"💀 หมดแรง"; background:#a8281a; }
+
+@media (prefers-reduced-motion:reduce){ .rz-visit, .rz-hyper, #rzFest{ display:none!important; } }
+
+/* แถบเลื่อนระดับเสียง (ศูนย์ตั้งค่า) */
+html body .rz-set .rz-set-range{ display:flex!important; flex-direction:column; align-items:stretch; gap:6px; cursor:default; }
+.rz-set-range em{ font-style:normal; font:700 13px/1 'Chakra Petch',sans-serif; color:var(--rz-trim); margin-left:6px; }
+html body .rz-set .rz-set-range input[type="range"]{ width:100%; height:22px; accent-color:var(--rz-trim); cursor:pointer; background:transparent!important; border:0!important; padding:0!important; }
